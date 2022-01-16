@@ -26,8 +26,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // Joysticks
   private final Joystick m_joystick = new Joystick(0);
-  private final DoubleSupplier m_mainVert = () -> m_joystick.getRawAxis(1);
-  private final DoubleSupplier m_mainHoriz = () -> m_joystick.getRawAxis(0);
+  private final DoubleSupplier m_zAxis = () -> m_joystick.getRawAxis(1);
+  private final DoubleSupplier m_xAxis = () -> m_joystick.getRawAxis(0);
   
   // The robot's subsystems and commands are defined here...
   private final Grabber m_grabber = new Grabber();
@@ -36,7 +36,7 @@ public class RobotContainer {
   private final Grab m_grab = new Grab(m_grabber);
 
   private final Drivetrain m_drive = new Drivetrain();
-  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_mainHoriz, m_mainVert);
+  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_grabber, m_zAxis, m_xAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,8 +47,8 @@ public class RobotContainer {
   // Button -> Command Mapping
   private void configureButtonBindings() {
     new JoystickButton(m_joystick, 1).whenHeld(m_grab);
-    new JoystickButton(m_joystick, 3).whenHeld(m_extendGrabber.withTimeout(2));
-    new JoystickButton(m_joystick, 4).whenHeld(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_joystick, 3).whenPressed(m_extendGrabber.withTimeout(2));
+    new JoystickButton(m_joystick, 4).whenPressed(m_retractGrabber.withTimeout(2));
   
     m_drive.setDefaultCommand(m_arcadeDrive);
   }

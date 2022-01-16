@@ -4,20 +4,25 @@
 
 package frc.robot.commands;
 
+import java.nio.ReadOnlyBufferException;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Grabber;
 
 public class ArcadeDrive extends CommandBase {
   private final Drivetrain m_drive;
-  private DoubleSupplier m_left, m_right;
+  private final Grabber m_grab;
+  private DoubleSupplier m_z, m_x;
   /** Creates a new ArcadeDrive. */
-  public ArcadeDrive(Drivetrain drive, DoubleSupplier left, DoubleSupplier right) {
+  public ArcadeDrive(Drivetrain drive, Grabber grab, DoubleSupplier z, DoubleSupplier x) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_left = left;
-    m_right = right;
+    m_grab = grab;
+    m_z = z;
+    m_x = x;
     addRequirements(drive);
   }
 
@@ -28,7 +33,9 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-m_left.getAsDouble(), m_right.getAsDouble());
+    if(m_grab.readUltrasound() > 1600) {
+      m_drive.arcadeDrive(m_x.getAsDouble(), m_z.getAsDouble());
+    }
   }
 
   // Called once the command ends or is interrupted.

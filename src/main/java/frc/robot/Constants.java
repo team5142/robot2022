@@ -14,12 +14,12 @@ package frc.robot;
  */
 public final class Constants {
 	public static class DriveConstants {
-		public static int kLeftMaster = 0;
-		public static int kLeftSlave = 1;
-		public static int kRightMaster = 2;
-		public static int kRightSlave = 3;
-		public static int kLeftEncoder = 4;
-		public static int kRightEncoder = 5;
+		public static int kLeftMaster = 20;
+		public static int kLeftSlave = 22;
+		public static int kRightMaster = 32;
+		public static int kRightSlave = 23;
+		public static int kLeftEncoder = 10;
+		public static int kRightEncoder = 11;
 	}
 
 	public static class GrabberConstants {
