@@ -18,6 +18,19 @@ public final class Constants {
 		public static int kLeftSlave = 1;
 		public static int kRightMaster = 2;
 		public static int kRightSlave = 3;
+		public static int kLeftEncoder = 4;
+		public static int kRightEncoder = 5;
 	}
 
+	public static class GrabberConstants {
+		public static int kSolForward = 4;
+		public static int kSolReverse = 5;
+		public static int kGrabberSPX = 1;
+	}
+
+	public static class Globals {
+		public static int kUltrasound = 1;
+	}
+
+	
 }
