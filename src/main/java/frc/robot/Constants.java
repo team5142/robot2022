@@ -13,24 +13,22 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	public static class DriveConstants {
-		public static int kLeftMaster = 4;
-		public static int kLeftSlave = 5;
-		public static int kRightMaster = 2;
-		public static int kRightSlave = 3;
-		public static int kLeftEncoder = 7;
-		public static int kRightEncoder = 6;
-	}
+  public static class DriveConstants {
+    public static int kLeftMaster = 4;
+    public static int kLeftSlave = 5;
+    public static int kRightMaster = 2;
+    public static int kRightSlave = 3;
+    public static int kLeftEncoder = 7;
+    public static int kRightEncoder = 6;
+  }
 
-	public static class GrabberConstants {
-		public static int kSolForward = 4;
-		public static int kSolReverse = 5;
-		public static int kGrabberSPX = 9;
-	}
+  public static class GrabberConstants {
+    public static int kSolForward = 4;
+    public static int kSolReverse = 5;
+    public static int kGrabberSPX = 9;
+  }
 
-	public static class Globals {
-		public static int kUltrasound = 1;
-	}
-
-	
+  public static class Globals {
+    public static int kUltrasound = 1;
+  }
 }
