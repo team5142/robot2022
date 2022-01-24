@@ -26,17 +26,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // Joysticks
   private final Joystick m_joystick = new Joystick(0);
-  private final DoubleSupplier m_zAxis = () -> m_joystick.getRawAxis(1);
-  private final DoubleSupplier m_xAxis = () -> m_joystick.getRawAxis(0);
+  private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
+  private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
   
   // The robot's subsystems and commands are defined here...
+  private final Drivetrain m_drive = new Drivetrain();
   private final Grabber m_grabber = new Grabber();
+  
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
   private final Grab m_grab = new Grab(m_grabber);
 
-  private final Drivetrain m_drive = new Drivetrain();
-  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_grabber, m_zAxis, m_xAxis);
+  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

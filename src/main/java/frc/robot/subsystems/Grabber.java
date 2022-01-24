@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.*;
 
 /**
  * Grabber Subsystem. Contains methods for pneumatic extension of
@@ -20,17 +20,15 @@ public class Grabber extends SubsystemBase {
   private static Boolean isExtended = false;
   private static Boolean isClose = false;
 
-  private DoubleSolenoid m_sol;
-  private WPI_VictorSPX m_spx;
-  private AnalogInput m_ultrasound;
+  private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
+  private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
+  private final AnalogInput m_ultrasound;
 
   /**
    * Creates a new Grabber Subsystem.
    */
   public Grabber() {
-    m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.GrabberConstants.kSolForward, Constants.GrabberConstants.kSolReverse);
-    m_spx = new WPI_VictorSPX(Constants.GrabberConstants.kGrabberSPX);
-    m_ultrasound = new AnalogInput(Constants.Globals.kUltrasound);
+    m_ultrasound = new AnalogInput(Globals.kUltrasound);
     m_ultrasound.setAverageBits(2);
   }
 
@@ -82,11 +80,6 @@ public class Grabber extends SubsystemBase {
   @Override
   public void periodic() {
     isClose = (readUltrasound() < 1600) ? true : false;
-    // if(readUltrasound() < 1600) {
-    //   isClose = true;
-    // } else {
-    //   isClose = false;
-    // }
     SmartDashboard.putBoolean("Grabber State", isExtended);
     SmartDashboard.putBoolean("Range State", isClose);
     if(isExtended && isClose) {
