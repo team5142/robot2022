@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -19,38 +21,39 @@ public class Grabber extends SubsystemBase {
   private static Boolean isExtended = false;
   private static Boolean isClose = false;
 
-  private final DoubleSolenoid m_sol =
-      new DoubleSolenoid(
-          PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
+  // private final DoubleSolenoid m_sol =
+      // new DoubleSolenoid(
+          // PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
   private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
-  private final AnalogInput m_ultrasound;
+  private final AnalogInput m_ultrasound = new AnalogInput(Globals.kUltrasound);
+  private final Conveyor m_conveyor;
 
   /** Creates a new Grabber Subsystem. */
-  public Grabber() {
-    m_ultrasound = new AnalogInput(Globals.kUltrasound);
+  public Grabber(Conveyor conveyor) {
     m_ultrasound.setAverageBits(2);
+    m_conveyor = conveyor;
   }
 
   /** Extends the pneumatics to the grabber subsystem. */
   public void extendGrabber() {
-    m_sol.set(Value.kForward);
+    // m_sol.set(Value.kForward);
     isExtended = true;
   }
 
   /** Retracts the pneumatics to the grabber subsystem. */
   public void retractGrabber() {
-    m_sol.set(Value.kReverse);
+    // m_sol.set(Value.kReverse);
     isExtended = false;
   }
 
   /** Toggles the grabber pneumatics off. */
   public void offGrabber() {
-    m_sol.set(Value.kOff);
+    // m_sol.set(Value.kOff);
   }
 
   /** Turns the grabber motor on. */
-  public void startGrab() {
-    m_spx.set(1);
+  public void startGrab(double speed) {
+    m_spx.set(speed);
   }
 
   /** Turns the grabber motor off. */
@@ -65,6 +68,14 @@ public class Grabber extends SubsystemBase {
    */
   public int readUltrasound() {
     return m_ultrasound.getValue();
+  }
+
+  /**
+   * Gets the base photo sensor on the conveyor.
+   * @return boolean of photosensor state. 
+   */
+  public boolean readBasePhoto() {
+    return m_conveyor.getBase();
   }
 
   @Override

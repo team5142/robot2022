@@ -28,6 +28,15 @@ public final class Constants {
     public static int kGrabberSPX = 9;
   }
 
+  public static class ConveyorConstants {
+    public static int kConveyor = 69;
+    public static int kConveyorEncoder = 420;
+    public static int kPhotoBase = 1;
+    public static int kPhotoMid = 2;
+    public static int kPhotoTop = 3;
+    public static int kCounter = 4;
+  }
+
   public static class Globals {
     public static int kUltrasound = 1;
   }

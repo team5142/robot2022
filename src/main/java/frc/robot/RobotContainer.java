@@ -10,6 +10,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.Grab;
 import frc.robot.commands.RetractGrabber;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
 import java.util.function.DoubleSupplier;
@@ -23,16 +24,22 @@ import java.util.function.DoubleSupplier;
 public class RobotContainer {
   // Joysticks
   private final Joystick m_joystick = new Joystick(0);
+  private final Joystick m_operator = new Joystick(1);
+  
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
   private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
 
+  private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(1);
+
+
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
-  private final Grabber m_grabber = new Grabber();
+  private final Conveyor m_conveyor = new Conveyor();
+  private final Grabber m_grabber = new Grabber(m_conveyor);
 
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
-  private final Grab m_grab = new Grab(m_grabber);
+  private final Grab m_grab = new Grab(m_grabber, m_opForward);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);

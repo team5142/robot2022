@@ -4,14 +4,18 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
 
 public class Grab extends CommandBase {
   private final Grabber m_grabber;
+  private DoubleSupplier m_speed;
   /** Creates a new Grab. */
-  public Grab(Grabber grabber) {
+  public Grab(Grabber grabber, DoubleSupplier speed) {
     m_grabber = grabber;
+    m_speed = speed;
     addRequirements(grabber);
   }
 
@@ -22,7 +26,7 @@ public class Grab extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.startGrab();
+    m_grabber.startGrab(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

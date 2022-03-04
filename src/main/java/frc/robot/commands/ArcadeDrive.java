@@ -31,9 +31,10 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_grab.readUltrasound() > 1600) {
-      m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
-    }
+    // if (m_grab.readUltrasound() > 1600) {
+    //   m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
+    // }
+    m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
