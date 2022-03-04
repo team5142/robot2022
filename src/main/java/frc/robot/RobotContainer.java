@@ -25,12 +25,11 @@ public class RobotContainer {
   // Joysticks
   private final Joystick m_joystick = new Joystick(0);
   private final Joystick m_operator = new Joystick(1);
-  
+
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
   private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
 
   private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(1);
-
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();

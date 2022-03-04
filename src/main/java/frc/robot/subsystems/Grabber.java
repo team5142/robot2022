@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
@@ -22,8 +17,8 @@ public class Grabber extends SubsystemBase {
   private static Boolean isClose = false;
 
   // private final DoubleSolenoid m_sol =
-      // new DoubleSolenoid(
-          // PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
+  // new DoubleSolenoid(
+  // PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
   private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
   private final AnalogInput m_ultrasound = new AnalogInput(Globals.kUltrasound);
   private final Conveyor m_conveyor;
@@ -72,7 +67,8 @@ public class Grabber extends SubsystemBase {
 
   /**
    * Gets the base photo sensor on the conveyor.
-   * @return boolean of photosensor state. 
+   *
+   * @return boolean of photosensor state.
    */
   public boolean readBasePhoto() {
     return m_conveyor.getBase();

@@ -37,6 +37,10 @@ public final class Constants {
     public static int kCounter = 4;
   }
 
+  public static class TurretConstants {
+    public static int kTurret = 9;
+  }
+
   public static class Globals {
     public static int kUltrasound = 1;
   }

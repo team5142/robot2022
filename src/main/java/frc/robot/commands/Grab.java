@@ -4,10 +4,9 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
+import java.util.function.DoubleSupplier;
 
 public class Grab extends CommandBase {
   private final Grabber m_grabber;

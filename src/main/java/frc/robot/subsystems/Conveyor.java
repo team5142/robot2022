@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +33,7 @@ public class Conveyor extends SubsystemBase {
   }
 
   public void intakeFirst() {
-    if(!m_photoBase.get() && m_count == 0) {
+    if (!m_photoBase.get() && m_count == 0) {
       m_conveyor.set(ControlMode.PercentOutput, 0.5);
     }
   }
@@ -50,7 +49,7 @@ public class Conveyor extends SubsystemBase {
   public boolean getTop() {
     return m_photoTop.get();
   }
-  
+
   public void manual(double speed) {
     m_conveyor.set(ControlMode.PercentOutput, speed);
   }
