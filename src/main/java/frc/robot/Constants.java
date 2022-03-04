@@ -25,7 +25,7 @@ public final class Constants {
   public static class GrabberConstants {
     public static int kSolForward = 4;
     public static int kSolReverse = 5;
-    public static int kGrabberSPX = 9;
+    public static int kGrabberSRX = 8;
   }
 
   public static class ConveyorConstants {
@@ -37,8 +37,26 @@ public final class Constants {
     public static int kCounter = 4;
   }
 
+  public static class FlywheelConstants {
+    public static int kFlyLeft = 44;
+    public static int kFlyRight = 47;
+  }
+
   public static class TurretConstants {
-    public static int kTurret = 9;
+    public static int kTurret = 36;
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
+    public static double kIz = 0;
+    public static double kFF = 1;
+    public static double kMaxOut = 0.3;
+    public static double kMinOut = -0.3;
+  }
+
+  public static class ClimberConstants {
+    public static int kClimberMaster = 99;
+    public static int kClimberFollower = 10;
+    public static int kEncoder;
   }
 
   public static class Globals {

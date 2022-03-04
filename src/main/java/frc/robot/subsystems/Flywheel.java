@@ -4,11 +4,20 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FlywheelConstants;
 
 public class Flywheel extends SubsystemBase {
+  private final CANSparkMax m_flyLeft =
+      new CANSparkMax(FlywheelConstants.kFlyLeft, MotorType.kBrushless);
+  private final CANSparkMax m_flyRight =
+      new CANSparkMax(FlywheelConstants.kFlyRight, MotorType.kBrushless);
   /** Creates a new Flywheel. */
-  public Flywheel() {}
+  public Flywheel() {
+    m_flyRight.follow(m_flyLeft, true);
+  }
 
   @Override
   public void periodic() {

@@ -9,10 +9,17 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.Grab;
+import frc.robot.commands.LiftClimber;
+import frc.robot.commands.LowerClimber;
 import frc.robot.commands.RetractGrabber;
+import frc.robot.commands.TurretLeft;
+import frc.robot.commands.TurretRight;
+import frc.robot.commands.ZeroTurret;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Turret;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -35,10 +42,17 @@ public class RobotContainer {
   private final Drivetrain m_drive = new Drivetrain();
   private final Conveyor m_conveyor = new Conveyor();
   private final Grabber m_grabber = new Grabber(m_conveyor);
+  private final Turret m_turret = new Turret();
+  private final Climber m_climber = new Climber();
 
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
+  private final TurretRight m_turrRight = new TurretRight(m_turret);
+  private final TurretLeft m_turrLeft = new TurretLeft(m_turret);
+  private final ZeroTurret m_turrZero = new ZeroTurret(m_turret);
+  private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
+  private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
@@ -51,9 +65,13 @@ public class RobotContainer {
 
   // Button -> Command Mapping
   private void configureButtonBindings() {
-    new JoystickButton(m_joystick, 1).whenHeld(m_grab);
-    new JoystickButton(m_joystick, 3).whenPressed(m_extendGrabber.withTimeout(2));
-    new JoystickButton(m_joystick, 4).whenPressed(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_joystick, 3).whileHeld(m_turrLeft);
+    new JoystickButton(m_joystick, 4).whileHeld(m_turrRight);
+    new JoystickButton(m_joystick, 5).whileHeld(m_liftClimber);
+    new JoystickButton(m_joystick, 10).whileHeld(m_lowerClimber);
+    new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
+    // new JoystickButton(m_joystick, 3).whenPressed(m_extendGrabber.withTimeout(2));
+    // new JoystickButton(m_joystick, 4).whenPressed(m_retractGrabber.withTimeout(2));
 
     m_drive.setDefaultCommand(m_arcadeDrive);
   }
