@@ -23,8 +23,8 @@ public final class Constants {
   }
 
   public static class GrabberConstants {
-    public static int kSolForward = 4;
-    public static int kSolReverse = 5;
+    public static int kSolForward = 2;
+    public static int kSolReverse = 3;
     public static int kGrabberSPX = 12;
   }
 
