@@ -25,6 +25,11 @@ public class Turret extends SubsystemBase {
     // m_turret.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_pidController = m_turret.getPIDController();
     m_encoder = m_turret.getEncoder();
+    m_pidController.setP(TurretConstants.kP);
+    m_pidController.setI(TurretConstants.kI);
+    m_pidController.setD(TurretConstants.kD);
+    m_pidController.setIZone(TurretConstants.kIz);
+    m_pidController.setFF(TurretConstants.kFF);
     m_pidController.setOutputRange(TurretConstants.kMinOut, TurretConstants.kMaxOut);
   }
 
@@ -46,6 +51,10 @@ public class Turret extends SubsystemBase {
 
   public double getPos() {
     return m_encoder.getPosition();
+  }
+
+  public void setTarget(double target) {
+    m_pidController.setReference(target, CANSparkMax.ControlType.kPosition);
   }
 
   @Override

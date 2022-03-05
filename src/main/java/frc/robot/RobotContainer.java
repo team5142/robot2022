@@ -14,6 +14,7 @@ import frc.robot.commands.LowerClimber;
 import frc.robot.commands.RetractGrabber;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretRight;
+import frc.robot.commands.TurretPID;
 import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
@@ -50,6 +51,7 @@ public class RobotContainer {
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
   private final TurretRight m_turrRight = new TurretRight(m_turret);
   private final TurretLeft m_turrLeft = new TurretLeft(m_turret);
+  private final TurretPID m_turrPID = new TurretPID(m_turret);
   private final ZeroTurret m_turrZero = new ZeroTurret(m_turret);
   private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
@@ -70,6 +72,7 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 5).whileHeld(m_liftClimber);
     new JoystickButton(m_joystick, 10).whileHeld(m_lowerClimber);
     new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
+    new JoystickButton(m_joystick, 2).whenPressed(m_turrPID);
     // new JoystickButton(m_joystick, 3).whenPressed(m_extendGrabber.withTimeout(2));
     // new JoystickButton(m_joystick, 4).whenPressed(m_retractGrabber.withTimeout(2));
 

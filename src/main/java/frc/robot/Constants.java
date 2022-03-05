@@ -44,7 +44,7 @@ public final class Constants {
 
   public static class TurretConstants {
     public static int kTurret = 36;
-    public static double kP = 0;
+    public static double kP = 10;
     public static double kI = 0;
     public static double kD = 0;
     public static double kIz = 0;
