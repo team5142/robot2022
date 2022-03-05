@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor extends SubsystemBase {
-  private final WPI_TalonSRX m_conveyor = new WPI_TalonSRX(ConveyorConstants.kConveyor);
+  private final WPI_TalonSRX m_conveyor = new WPI_TalonSRX(ConveyorConstants.kConveyorSRX);
   public final DigitalInput m_photoBase = new DigitalInput(ConveyorConstants.kPhotoBase);
   public final DigitalInput m_photoMid = new DigitalInput(ConveyorConstants.kPhotoMid);
   public final DigitalInput m_photoTop = new DigitalInput(ConveyorConstants.kPhotoTop);

@@ -11,7 +11,7 @@ import java.lang.Math;
 public class TurretPID extends CommandBase {
   /** Creates a new TurretPID. */
   private final Turret m_turret;
-  private final double target=10;
+  private final double target=30;
 
   public TurretPID(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.

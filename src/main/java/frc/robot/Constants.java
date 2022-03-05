@@ -25,12 +25,11 @@ public final class Constants {
   public static class GrabberConstants {
     public static int kSolForward = 4;
     public static int kSolReverse = 5;
-    public static int kGrabberSRX = 8;
+    public static int kGrabberSPX = 11;
   }
 
   public static class ConveyorConstants {
-    public static int kConveyor = 69;
-    public static int kConveyorEncoder = 420;
+    public static int kConveyorSRX = 8;
     public static int kPhotoBase = 1;
     public static int kPhotoMid = 2;
     public static int kPhotoTop = 3;
@@ -43,7 +42,7 @@ public final class Constants {
   }
 
   public static class TurretConstants {
-    public static int kTurret = 36;
+    public static int kTurret = 20;
     public static double kP = 10;
     public static double kI = 0;
     public static double kD = 0;
@@ -54,9 +53,9 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static int kClimberMaster = 99;
-    public static int kClimberFollower = 10;
-    public static int kEncoder;
+    public static int kClimberMasterSRX = 12;
+    public static int kClimberFollowerSRX = 10;
+    public static int kEncoder = 9;
   }
 
   public static class Globals {

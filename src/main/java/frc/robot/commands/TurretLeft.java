@@ -36,7 +36,7 @@ public class TurretLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_turret.getPos() <= -75) {
+    if (m_turret.getPos() <= -43) {
       return true;
     }
     return false;

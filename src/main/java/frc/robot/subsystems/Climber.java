@@ -14,9 +14,8 @@ import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMaster);
-
-  private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollower);
+  private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
+  private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
   private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
 
   public Climber() {

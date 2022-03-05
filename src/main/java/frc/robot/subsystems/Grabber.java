@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +21,7 @@ public class Grabber extends SubsystemBase {
   // private final DoubleSolenoid m_sol =
   // new DoubleSolenoid(
   // PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
-  private final WPI_TalonSRX m_spx = new WPI_TalonSRX(GrabberConstants.kGrabberSRX);
+  private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
   private final AnalogInput m_ultrasound = new AnalogInput(Globals.kUltrasound);
   private final Conveyor m_conveyor;
 
