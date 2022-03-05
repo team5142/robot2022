@@ -9,13 +9,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMaster);
+
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollower);
   private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
 
