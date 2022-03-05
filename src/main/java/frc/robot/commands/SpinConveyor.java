@@ -4,17 +4,20 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Conveyor;
 
-public class LiftClimber extends CommandBase {
-  /** Creates a new LiftClimber. */
-  private final Climber m_climber;
-
-  public LiftClimber(Climber climber) {
+public class SpinConveyor extends CommandBase {
+  /** Creates a new ManualConveyor. */
+  private final Conveyor m_conveyor;
+  private DoubleSupplier m_speed;
+  public SpinConveyor(Conveyor conveyor, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climber = climber;
-    addRequirements(climber);
+    m_conveyor = conveyor;
+    m_speed = speed;
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +27,13 @@ public class LiftClimber extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.liftClimber();
+    m_conveyor.manual(-m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climber.stop();
+    m_conveyor.stop();
   }
 
   // Returns true when the command should end.

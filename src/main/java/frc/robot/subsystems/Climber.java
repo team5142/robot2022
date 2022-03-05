@@ -20,20 +20,21 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
     m_follower.follow(m_master);
+    m_master.setNeutralMode(NeutralMode.Brake);
     m_follower.setNeutralMode(NeutralMode.Brake);
     m_encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
   }
 
-  public void liftFollower() {
-    m_follower.set(ControlMode.PercentOutput, 0.25);
+  public void liftClimber() {
+    m_master.set(ControlMode.PercentOutput, -0.25);
   }
 
-  public void lowerFollower() {
-    m_follower.set(ControlMode.PercentOutput, -0.25);
+  public void lowerClimber() {
+    m_master.set(ControlMode.PercentOutput, 0.25);
   }
 
   public void stop() {
-    m_follower.stopMotor();
+    m_master.stopMotor();
   }
 
   @Override

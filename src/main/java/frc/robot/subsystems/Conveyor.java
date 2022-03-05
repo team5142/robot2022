@@ -50,6 +50,10 @@ public class Conveyor extends SubsystemBase {
     return m_photoTop.get();
   }
 
+  public void stop() {
+    m_conveyor.stopMotor();
+  }
+
   public void manual(double speed) {
     m_conveyor.set(ControlMode.PercentOutput, speed);
   }

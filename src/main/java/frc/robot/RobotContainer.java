@@ -5,12 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.Grab;
 import frc.robot.commands.LiftClimber;
 import frc.robot.commands.LowerClimber;
+import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.RetractGrabber;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretRight;
@@ -37,7 +39,7 @@ public class RobotContainer {
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
   private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
 
-  private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(1);
+  private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(5);
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
@@ -55,6 +57,7 @@ public class RobotContainer {
   private final ZeroTurret m_turrZero = new ZeroTurret(m_turret);
   private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
+  private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
@@ -74,6 +77,8 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
     new JoystickButton(m_joystick, 2).whenPressed(m_turrPID);
     new JoystickButton(m_joystick, 7).whenPressed(m_grab);
+    new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
+    new JoystickButton(m_operator, 2).whileHeld(m_grab);   
     // new JoystickButton(m_joystick, 3).whenPressed(m_extendGrabber.withTimeout(2));
     // new JoystickButton(m_joystick, 4).whenPressed(m_retractGrabber.withTimeout(2));
 

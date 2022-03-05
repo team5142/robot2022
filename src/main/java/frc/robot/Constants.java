@@ -25,7 +25,7 @@ public final class Constants {
   public static class GrabberConstants {
     public static int kSolForward = 4;
     public static int kSolReverse = 5;
-    public static int kGrabberSPX = 11;
+    public static int kGrabberSPX = 12;
   }
 
   public static class ConveyorConstants {
@@ -50,11 +50,14 @@ public final class Constants {
     public static double kFF = 1;
     public static double kMaxOut = 0.3;
     public static double kMinOut = -0.3;
+    public static double kCameraHeight = 29.5;
+    public static double kCameraPitch = 0;
+    public static double kGoalDistance = 3;
   }
 
   public static class ClimberConstants {
-    public static int kClimberMasterSRX = 12;
-    public static int kClimberFollowerSRX = 10;
+    public static int kClimberMasterSRX = 10;
+    public static int kClimberFollowerSRX = 11;
     public static int kEncoder = 9;
   }
 

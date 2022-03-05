@@ -6,6 +6,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import org.photonvision.PhotonCamera;
+import org.photonvision.common.hardware.VisionLEDMode;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +22,7 @@ public class Turret extends SubsystemBase {
   private final SparkMaxPIDController m_pidController;
   private final RelativeEncoder m_encoder;
   public double desiredPos;
+  private final PhotonCamera m_camera = new PhotonCamera("photonvision");
   /** Creates a new Turret. */
   public Turret() {
     m_turret.restoreFactoryDefaults();
@@ -31,8 +36,13 @@ public class Turret extends SubsystemBase {
     m_pidController.setIZone(TurretConstants.kIz);
     m_pidController.setFF(TurretConstants.kFF);
     m_pidController.setOutputRange(TurretConstants.kMinOut, TurretConstants.kMaxOut);
+    m_camera.setLED(VisionLEDMode.kOn);
   }
 
+  public PhotonTrackedTarget getResult() {
+    return m_camera.getLatestResult().getBestTarget();
+  }
+  
   public void stopMotor() {
     m_turret.stopMotor();
   }
@@ -53,6 +63,10 @@ public class Turret extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
+  public double getDeg() {
+    return m_encoder.getPosition() * 1.93;
+  }
+
   public void setTarget(double target) {
     m_pidController.setReference(target, CANSparkMax.ControlType.kPosition);
   }
@@ -61,5 +75,6 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Enc Pos", getPos());
+    SmartDashboard.putNumber("Enc Deg", getDeg());
   }
 }
