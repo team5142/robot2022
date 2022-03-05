@@ -33,11 +33,11 @@ public class Turret extends SubsystemBase {
   }
 
   public void turnRight() {
-    m_turret.set(0.2);
+    m_turret.set(0.25);
   }
 
   public void turnLeft() {
-    m_turret.set(-0.2);
+    m_turret.set(-0.25);
   }
 
   public void zeroEncoder() {
