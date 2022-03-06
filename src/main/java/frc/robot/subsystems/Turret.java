@@ -22,7 +22,7 @@ public class Turret extends SubsystemBase {
   private final SparkMaxPIDController m_pidController;
   private final RelativeEncoder m_encoder;
   public double desiredPos;
-  private final PhotonCamera m_camera = new PhotonCamera("photonvision");
+  private final PhotonCamera m_camera = new PhotonCamera("mmal_service_16.1");
   /** Creates a new Turret. */
   public Turret() {
     m_turret.restoreFactoryDefaults();
@@ -42,7 +42,17 @@ public class Turret extends SubsystemBase {
   public PhotonTrackedTarget getResult() {
     return m_camera.getLatestResult().getBestTarget();
   }
-  
+
+  public double getDistance() {
+    var target = m_camera.getLatestResult().getTargets().get(0);
+    if(target != null) {
+      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + target.getPitch()));
+      return distance;
+    }
+    else {
+      return 1e99;
+    }
+  }
   public void stopMotor() {
     m_turret.stopMotor();
   }
@@ -76,5 +86,6 @@ public class Turret extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Enc Pos", getPos());
     SmartDashboard.putNumber("Enc Deg", getDeg());
+    SmartDashboard.putNumber("Distance", getDistance());
   }
 }

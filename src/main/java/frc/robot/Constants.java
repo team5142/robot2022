@@ -37,21 +37,29 @@ public final class Constants {
   }
 
   public static class FlywheelConstants {
-    public static int kFlyLeft = 44;
-    public static int kFlyRight = 47;
+    public static int kFlyLeft = 40;
+    public static int kFlyRight = 41;
+    public static double kP = 0.02;
+    public static double kI = 0;
+    public static double kD = 0.02;
+    public static double kIz = 0;
+    public static double kFF = 0.00015;
+    public static double kMaxOut = 1;
+    public static double kMinOut = -1;
   }
 
   public static class TurretConstants {
     public static int kTurret = 20;
-    public static double kP = 10;
+    public static double kP = 0.03;
     public static double kI = 0;
-    public static double kD = 0;
+    public static double kD = 0.2;
     public static double kIz = 0;
-    public static double kFF = 1;
+    public static double kFF = 0.00015;
     public static double kMaxOut = 0.3;
     public static double kMinOut = -0.3;
-    public static double kCameraHeight = 29.5;
-    public static double kCameraPitch = 0;
+    public static double kCameraHeight = 0.55;
+    public static double kCameraPitch = 1;
+    public static double kGoalHeight = 0.76;
     public static double kGoalDistance = 3;
   }
 
