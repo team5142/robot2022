@@ -15,6 +15,7 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
+import edu.wpi.first.math.util.Units;
 
 public class Turret extends SubsystemBase {
   private final CANSparkMax m_turret =
@@ -46,7 +47,7 @@ public class Turret extends SubsystemBase {
   public double getDistance() {
     var target = m_camera.getLatestResult().getTargets().get(0);
     if(target != null) {
-      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + target.getPitch()));
+      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + Units.degreesToRadians(target.getPitch())));
       return distance;
     }
     else {
