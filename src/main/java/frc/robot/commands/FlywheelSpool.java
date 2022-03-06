@@ -5,25 +5,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Flywheel;
 
-public class AlignTurret extends CommandBase {
-  /** Creates a new AlignTurret. */
-  private final Turret m_turret;
-  public AlignTurret(Turret turret) {
+public class FlywheelSpool extends CommandBase {
+  /** Creates a new FlywheelSpool. */
+  private final Flywheel m_fly;
+  public FlywheelSpool(Flywheel fly) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_turret = turret;
-    addRequirements(turret);
+    m_fly = fly;
+    addRequirements(fly);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_fly.set();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double yaw = m_turret.getResult().getYaw();
   }
 
   // Called once the command ends or is interrupted.

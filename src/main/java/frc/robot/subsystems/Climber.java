@@ -26,11 +26,11 @@ public class Climber extends SubsystemBase {
   }
 
   public void liftClimber() {
-    m_master.set(ControlMode.PercentOutput, -0.25);
+    m_master.set(ControlMode.PercentOutput, -0.5);
   }
 
   public void lowerClimber() {
-    m_master.set(ControlMode.PercentOutput, 0.25);
+    m_master.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void stop() {

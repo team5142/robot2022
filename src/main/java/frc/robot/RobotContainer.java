@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExtendGrabber;
+import frc.robot.commands.FlywheelSpool;
 import frc.robot.commands.Grab;
 import frc.robot.commands.LiftClimber;
 import frc.robot.commands.LowerClimber;
@@ -21,6 +23,7 @@ import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Turret;
 import java.util.function.DoubleSupplier;
@@ -47,6 +50,7 @@ public class RobotContainer {
   private final Grabber m_grabber = new Grabber(m_conveyor);
   private final Turret m_turret = new Turret();
   private final Climber m_climber = new Climber();
+  private final Flywheel m_fly = new Flywheel();
 
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
@@ -58,6 +62,7 @@ public class RobotContainer {
   private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
   private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
+  private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
@@ -79,6 +84,7 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 7).whenPressed(m_grab);
     new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
     new JoystickButton(m_operator, 2).whileHeld(m_grab);   
+    new JoystickButton(m_operator, 4).whenPressed(m_flySpool);   
     new JoystickButton(m_joystick, 13).whenPressed(m_extendGrabber.withTimeout(2));
     new JoystickButton(m_joystick, 14).whenPressed(m_retractGrabber.withTimeout(2));
 
