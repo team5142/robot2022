@@ -84,7 +84,7 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 7).whenPressed(m_grab);
     new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
     new JoystickButton(m_operator, 2).whileHeld(m_grab);   
-    new JoystickButton(m_operator, 4).whenPressed(m_flySpool);   
+    new JoystickButton(m_operator, 4).whileHeld(m_flySpool);   
     new JoystickButton(m_joystick, 13).whenPressed(m_extendGrabber.withTimeout(2));
     new JoystickButton(m_joystick, 14).whenPressed(m_retractGrabber.withTimeout(2));
 

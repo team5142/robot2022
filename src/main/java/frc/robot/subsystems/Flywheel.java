@@ -43,6 +43,10 @@ public class Flywheel extends SubsystemBase {
     m_flyLeft.set(1);
   }
 
+  public void stop() {
+    m_flyLeft.stopMotor();
+  }
+
   public void setRPM() {
     m_pid.setReference(8000, CANSparkMax.ControlType.kVelocity);
   }
