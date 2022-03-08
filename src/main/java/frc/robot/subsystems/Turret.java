@@ -45,13 +45,15 @@ public class Turret extends SubsystemBase {
   }
 
   public double getDistance() {
-    var target = m_camera.getLatestResult().getTargets().get(0);
-    if(target != null) {
-      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + Units.degreesToRadians(target.getPitch())));
+    double pitch;
+    if (m_camera.getLatestResult().hasTargets()){
+      pitch = m_camera.getLatestResult().getBestTarget().getPitch();
+      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + Units.degreesToRadians(pitch)));
       return distance;
     }
     else {
       return 1e99;
+
     }
   }
   public void stopMotor() {
@@ -79,7 +81,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void setTarget(double target) {
-    m_pidController.setReference(target, CANSparkMax.ControlType.kPosition);
+    m_pidController.setReference(target/1.93, CANSparkMax.ControlType.kPosition);
   }
 
   @Override

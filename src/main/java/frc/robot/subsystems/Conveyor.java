@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import org.opencv.features2d.FlannBasedMatcher;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -20,20 +22,21 @@ public class Conveyor extends SubsystemBase {
   public final DigitalInput m_photoMid = new DigitalInput(ConveyorConstants.kPhotoMid);
   public final DigitalInput m_photoTop = new DigitalInput(ConveyorConstants.kPhotoTop);
   public final Counter m_counter = new Counter(ConveyorConstants.kCounter);
-  private static int m_pos = 0;
+  //private static int m_pos = 0;
   private static int m_count = 0;
+  private static boolean m_baseLast = false;
+  private static boolean m_topLast = false;
   /** Creates a new Coveyor. */
   public Conveyor() {
     m_conveyor.configFactoryDefault();
     m_conveyor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
-
+/**
   public void increment() {
-    // run motion magic
     m_pos = 1;
     m_count = 1;
   }
-
+*/
   public void intakeFirst() {
     if (!m_photoBase.get() && m_count == 0) {
       m_conveyor.set(ControlMode.PercentOutput, 0.5);
@@ -52,6 +55,10 @@ public class Conveyor extends SubsystemBase {
     return m_photoTop.get();
   }
 
+  public void setCount(int count){
+    m_count=count;
+  }
+
   public void stop() {
     m_conveyor.stopMotor();
   }
@@ -63,5 +70,19 @@ public class Conveyor extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (!getBase()&&m_baseLast){
+      m_count++;
+    }
+    if (!getTop()&&m_topLast){
+      m_count--;
+    }
+    m_baseLast=getBase();
+    m_topLast=getTop();
+    if (m_count>=3){
+      m_count=2;
+    }
+    else if (m_count<=-1){
+      m_count=0;
+    }
   }
 }
