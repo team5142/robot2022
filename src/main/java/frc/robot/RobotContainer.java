@@ -43,6 +43,7 @@ public class RobotContainer {
   private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
 
   private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(5);
+  private final DoubleSupplier m_opLeftHorizontal = () -> m_operator.getRawAxis(0);
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
@@ -57,7 +58,7 @@ public class RobotContainer {
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
   private final TurretRight m_turrRight = new TurretRight(m_turret);
   private final TurretLeft m_turrLeft = new TurretLeft(m_turret);
-  private final TurretPID m_turrPID = new TurretPID(m_turret);
+  private final TurretPID m_turrPID = new TurretPID(m_turret, m_opLeftHorizontal);
   private final ZeroTurret m_turrZero = new ZeroTurret(m_turret);
   private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
@@ -80,7 +81,7 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 5).whileHeld(m_liftClimber);
     new JoystickButton(m_joystick, 10).whileHeld(m_lowerClimber);
     new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
-    new JoystickButton(m_joystick, 2).whenPressed(m_turrPID);
+    new JoystickButton(m_operator, 5).whenPressed(m_turrPID);
     new JoystickButton(m_joystick, 7).whenPressed(m_grab);
     new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
     new JoystickButton(m_operator, 2).whileHeld(m_grab);   

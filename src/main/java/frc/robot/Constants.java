@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.math.util.Units;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -23,8 +23,8 @@ public final class Constants {
   }
 
   public static class GrabberConstants {
-    public static int kSolForward = 2;
-    public static int kSolReverse = 3;
+    public static int kSolForward = 0;
+    public static int kSolReverse = 1;
     public static int kGrabberSPX = 12;
   }
 
@@ -58,8 +58,8 @@ public final class Constants {
     public static double kMaxOut = 0.3;
     public static double kMinOut = -0.3;
     public static double kCameraHeight = 0.55;
-    public static double kCameraPitch = 1;
-    public static double kGoalHeight = 0.76;
+    public static double kCameraPitch = Units.degreesToRadians(4);
+    public static double kGoalHeight = 0.89;
     public static double kGoalDistance = 3;
   }
 

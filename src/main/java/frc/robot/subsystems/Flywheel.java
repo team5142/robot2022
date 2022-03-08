@@ -24,7 +24,7 @@ public class Flywheel extends SubsystemBase {
   public Flywheel() {
     m_flyLeft.restoreFactoryDefaults();
     m_flyRight.restoreFactoryDefaults();
-    // m_flyRight.follow(m_flyLeft, true);
+    m_flyRight.follow(m_flyLeft, true);
     m_enc = m_flyLeft.getEncoder();
     m_pid = m_flyLeft.getPIDController();
     m_pid.setP(FlywheelConstants.kP);
