@@ -19,13 +19,15 @@ public class Flywheel extends SubsystemBase {
   private final CANSparkMax m_flyRight =
       new CANSparkMax(FlywheelConstants.kFlyRight, MotorType.kBrushless);
   private final RelativeEncoder m_enc;
+  private final RelativeEncoder m_encRight;
   private final SparkMaxPIDController m_pid;
   /** Creates a new Flywheel. */
   public Flywheel() {
     m_flyLeft.restoreFactoryDefaults();
     m_flyRight.restoreFactoryDefaults();
-    m_flyRight.follow(m_flyLeft, true);
+    // m_flyRight.follow(m_flyLeft, true);
     m_enc = m_flyLeft.getEncoder();
+    m_encRight = m_flyRight.getEncoder();
     m_pid = m_flyLeft.getPIDController();
     m_pid.setP(FlywheelConstants.kP);
     m_pid.setI(FlywheelConstants.kI);
@@ -40,19 +42,22 @@ public class Flywheel extends SubsystemBase {
   } 
 
   public void set() {
+    // m_flyLeft.set(0.5);
     m_flyLeft.set(1);
   }
 
   public void stop() {
+    // m_flyLeft.stopMotor();
     m_flyLeft.stopMotor();
   }
 
   public void setRPM() {
-    m_pid.setReference(8000, CANSparkMax.ControlType.kVelocity);
+    m_pid.setReference(3000, CANSparkMax.ControlType.kVelocity);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("FlywheelRPM", getRPM());
+    SmartDashboard.putNumber("FlywheelLeftRPM", getRPM());
+    SmartDashboard.putNumber("FlywheelRightRPM", m_encRight.getVelocity());
   }
 }

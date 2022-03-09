@@ -40,9 +40,6 @@ public class TurretPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(m_turret.getDeg()-target.getAsDouble()) <= 0.5) {
-      return true;
-    }
     return false;
   }
 }

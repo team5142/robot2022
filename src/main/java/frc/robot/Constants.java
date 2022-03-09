@@ -39,11 +39,11 @@ public final class Constants {
   public static class FlywheelConstants {
     public static int kFlyLeft = 40;
     public static int kFlyRight = 41;
-    public static double kP = 0.02;
+    public static double kP = 0.0004;
     public static double kI = 0;
-    public static double kD = 0.02;
+    public static double kD = 0.008;
     public static double kIz = 0;
-    public static double kFF = 0.00015;
+    public static double kFF = 0.000195;
     public static double kMaxOut = 1;
     public static double kMinOut = -1;
   }
