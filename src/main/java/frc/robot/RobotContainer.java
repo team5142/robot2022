@@ -8,6 +8,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.FlywheelSpool;
@@ -85,10 +86,15 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 7).whenPressed(m_grab);
     new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
     new JoystickButton(m_operator, 2).whileHeld(m_grab);   
-    new JoystickButton(m_operator, 4).whileHeld(m_flySpool);   
     new JoystickButton(m_joystick, 13).whenPressed(m_extendGrabber.withTimeout(2));
     new JoystickButton(m_joystick, 14).whenPressed(m_retractGrabber.withTimeout(2));
 
+    new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_operator, 8).whenPressed(m_retractGrabber.withTimeout(2));
+    // new JoystickButton(m_operator, 5).whileHeld(autoAim);
+    new JoystickButton(m_operator, 7).whileHeld(m_flySpool);
+    new POVButton(m_operator, 0).whileHeld(m_liftClimber);
+    new POVButton(m_operator, 180).whileHeld(m_lowerClimber);
     m_drive.setDefaultCommand(m_arcadeDrive);
   }
 
