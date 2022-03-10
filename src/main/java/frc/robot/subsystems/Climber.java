@@ -33,6 +33,10 @@ public class Climber extends SubsystemBase {
     m_master.set(ControlMode.PercentOutput, 0.5);
   }
 
+  public void zeroEncoder() {
+    m_encoder.setPosition(0);
+  }
+
   public double getPos() {
     return m_encoder.getPosition();
   }
