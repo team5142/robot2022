@@ -16,6 +16,7 @@ import frc.robot.commands.Grab;
 import frc.robot.commands.LiftClimber;
 import frc.robot.commands.LowerClimber;
 import frc.robot.commands.RetractGrabber;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretPID;
@@ -68,9 +69,10 @@ public class RobotContainer {
   private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
   private final ZeroClimber m_climberZero = new ZeroClimber(m_climber);
+  private final Shoot m_shoot = new Shoot(m_conveyor);
 
   private final ArcadeDrive m_arcadeDrive =
-      new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
+      new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -84,12 +86,14 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 10).whenPressed(m_climberZero);
 
     new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
-    new JoystickButton(m_operator, 8).whenPressed(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_operator, 8).whenPressed(m_extendGrabber.withTimeout(2));
     // new JoystickButton(m_operator, 5).whileHeld(autoAim);
-    new JoystickButton(m_operator, 7).whileHeld(m_flySpool);
+    new JoystickButton(m_operator, 5).whileHeld(m_flySpool);
+    new JoystickButton(m_operator, 7).whileHeld(m_shoot);
     new POVButton(m_operator, 0).whileHeld(m_liftClimber);
     new POVButton(m_operator, 180).whileHeld(m_lowerClimber);
     m_drive.setDefaultCommand(m_arcadeDrive);
+    m_grab.setDefaultCommand(m_grabber);
   }
 
   /**

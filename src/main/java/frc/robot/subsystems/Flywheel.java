@@ -24,21 +24,30 @@ public class Flywheel extends SubsystemBase {
       new CANSparkMax(FlywheelConstants.kFlyRight, MotorType.kBrushless);
   private final RelativeEncoder m_enc;
   private final RelativeEncoder m_encRight;
-  private final SparkMaxPIDController m_pid;
+  private final SparkMaxPIDController m_pidLeft;
+  private final SparkMaxPIDController m_pidRight;
   /** Creates a new Flywheel. */
   public Flywheel() {
     m_flyLeft.restoreFactoryDefaults();
     m_flyRight.restoreFactoryDefaults();
-    // m_flyRight.follow(m_flyLeft, true);
+    //m_flyRight.follow(m_flyLeft, true);
     m_enc = m_flyLeft.getEncoder();
     m_encRight = m_flyRight.getEncoder();
-    m_pid = m_flyLeft.getPIDController();
-    m_pid.setP(FlywheelConstants.kP);
-    m_pid.setI(FlywheelConstants.kI);
-    m_pid.setD(FlywheelConstants.kD);
-    m_pid.setIZone(FlywheelConstants.kIz);
-    m_pid.setFF(FlywheelConstants.kFF);
-    m_pid.setOutputRange(FlywheelConstants.kMinOut, FlywheelConstants.kMaxOut);
+    m_pidLeft = m_flyLeft.getPIDController();
+    m_pidLeft.setP(FlywheelConstants.kP);
+    m_pidLeft.setI(FlywheelConstants.kI);
+    m_pidLeft.setD(FlywheelConstants.kD);
+    m_pidLeft.setIZone(FlywheelConstants.kIz);
+    m_pidLeft.setFF(FlywheelConstants.kFF);
+    m_pidLeft.setOutputRange(FlywheelConstants.kMinOut, FlywheelConstants.kMaxOut);
+    m_flyLeft.setClosedLoopRampRate(0.5);
+    m_pidRight = m_flyRight.getPIDController();
+    m_pidRight.setP(FlywheelConstants.kP);
+    m_pidRight.setI(FlywheelConstants.kI);
+    m_pidRight.setD(FlywheelConstants.kD);
+    m_pidRight.setIZone(FlywheelConstants.kIz);
+    m_pidRight.setFF(FlywheelConstants.kFF);
+    m_pidRight.setOutputRange(FlywheelConstants.kMinOut, FlywheelConstants.kMaxOut);
   }
 
   /**
@@ -59,11 +68,14 @@ public class Flywheel extends SubsystemBase {
 
   public void stop() {
     // m_flyLeft.stopMotor();
+    m_pidLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
     m_flyLeft.stopMotor();
+    m_flyRight.stopMotor();
   }
 
   public void setRPM() {
-    m_pid.setReference(3000, CANSparkMax.ControlType.kVelocity);
+    m_pidLeft.setReference(5000, CANSparkMax.ControlType.kVelocity);
+    //m_pidRight.setReference(-5000, CANSparkMax.ControlType.kVelocity);
   }
 
   @Override

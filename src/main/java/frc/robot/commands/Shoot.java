@@ -5,17 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Grabber;
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.Conveyor;
 
-public class Grab extends CommandBase {
-  private final Grabber m_grabber;
-  private DoubleSupplier m_speed;
-  /** Creates a new Grab. */
-  public Grab(Grabber grabber, DoubleSupplier speed) {
-    m_grabber = grabber;
-    m_speed = speed;
-    addRequirements(grabber);
+public class Shoot extends CommandBase {
+  /** Creates a new ManualConveyor. */
+  private final Conveyor m_conveyor;
+
+  public Shoot(Conveyor conveyor) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_conveyor = conveyor;
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +24,13 @@ public class Grab extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.startGrab(m_speed.getAsDouble());
+    m_conveyor.manual(0.25);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_grabber.stopGrab();
+    m_conveyor.stop();
   }
 
   // Returns true when the command should end.
