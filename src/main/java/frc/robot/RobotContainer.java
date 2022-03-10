@@ -19,6 +19,7 @@ import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.RetractGrabber;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretRight;
+import frc.robot.commands.ZeroClimber;
 import frc.robot.commands.TurretPID;
 import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
@@ -65,6 +66,7 @@ public class RobotContainer {
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
   private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
+  private final ZeroClimber m_ClimberZero = new ZeroClimber(m_climber);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);

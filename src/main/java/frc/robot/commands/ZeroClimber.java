@@ -7,38 +7,32 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class LowerClimber extends CommandBase {
-  /** Creates a new LowerClimber. */
+public class ZeroClimber extends CommandBase {
+  /** Creates a new ZeroClimber. */
   private final Climber m_climber;
 
-  public LowerClimber(Climber climber) {
+  public ZeroClimber(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
-    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_climber.zeroEncoder();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_climber.lowerClimber();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_climber.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_climber.getPos() <= 0) {
-      return true;
-    }
     return false;
   }
 }
