@@ -4,35 +4,43 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
 
-public class ZeroClimber extends CommandBase {
-  /** Creates a new ZeroClimber. */
-  private final Climber m_climber;
+public class AutoDrive extends CommandBase {
+  /** Creates a new AutoDrive. */
+  private final Drivetrain m_drive;
 
-  public ZeroClimber(Climber climber) {
+  public AutoDrive(Drivetrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climber = climber;
+    m_drive = drive;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_climber.zeroEncoder();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drive.arcadeDrive(1, 0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.arcadeDrive(0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    double avg = (m_drive.getLeftEncoder() + m_drive.getRightEncoder()) / 2;
+    if (avg > 30000 || Timer.getMatchTime() < 10) {
+      return true;
+    }
     return false;
   }
 }

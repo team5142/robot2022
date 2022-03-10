@@ -4,15 +4,16 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
+import java.util.function.DoubleSupplier;
 
 public class SpinConveyor extends CommandBase {
   /** Creates a new ManualConveyor. */
   private final Conveyor m_conveyor;
+
   private DoubleSupplier m_speed;
+
   public SpinConveyor(Conveyor conveyor, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_conveyor = conveyor;

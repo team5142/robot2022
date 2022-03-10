@@ -4,23 +4,23 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoDrive;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.FlywheelSpool;
 import frc.robot.commands.Grab;
 import frc.robot.commands.LiftClimber;
 import frc.robot.commands.LowerClimber;
-import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.RetractGrabber;
+import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.TurretLeft;
+import frc.robot.commands.TurretPID;
 import frc.robot.commands.TurretRight;
 import frc.robot.commands.ZeroClimber;
-import frc.robot.commands.TurretPID;
 import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
@@ -55,6 +55,7 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Flywheel m_fly = new Flywheel();
 
+  private final AutoDrive m_autoDrive = new AutoDrive(m_drive);
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
@@ -66,7 +67,7 @@ public class RobotContainer {
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
   private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
-  private final ZeroClimber m_ClimberZero = new ZeroClimber(m_climber);
+  private final ZeroClimber m_climberZero = new ZeroClimber(m_climber);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
@@ -79,17 +80,8 @@ public class RobotContainer {
 
   // Button -> Command Mapping
   private void configureButtonBindings() {
-    new JoystickButton(m_joystick, 3).whileHeld(m_turrLeft);
-    new JoystickButton(m_joystick, 4).whileHeld(m_turrRight);
-    new JoystickButton(m_joystick, 5).whileHeld(m_liftClimber);
-    new JoystickButton(m_joystick, 10).whileHeld(m_lowerClimber);
-    new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
-    new JoystickButton(m_operator, 5).whileHeld(m_turrPID);
-    new JoystickButton(m_joystick, 7).whenPressed(m_grab);
-    new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
-    new JoystickButton(m_operator, 2).whileHeld(m_grab);   
-    new JoystickButton(m_joystick, 13).whenPressed(m_extendGrabber.withTimeout(2));
-    new JoystickButton(m_joystick, 14).whenPressed(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_joystick, 5).whenPressed(m_turrZero);
+    new JoystickButton(m_joystick, 10).whenPressed(m_climberZero);
 
     new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
     new JoystickButton(m_operator, 8).whenPressed(m_retractGrabber.withTimeout(2));
@@ -105,8 +97,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   // An ExampleCommand will run in autonomous
-  //   // return m_autoCommand;
-  // }
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return m_autoDrive;
+  }
 }

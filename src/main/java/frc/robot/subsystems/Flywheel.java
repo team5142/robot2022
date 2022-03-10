@@ -5,14 +5,18 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FlywheelConstants;
 
+/**
+ * The Flywheel Class controls the flywheel shooter. 
+ * 
+ * @author Spencer Greene & Gavin Popkin
+ */
 public class Flywheel extends SubsystemBase {
   private final CANSparkMax m_flyLeft =
       new CANSparkMax(FlywheelConstants.kFlyLeft, MotorType.kBrushless);
@@ -37,10 +41,17 @@ public class Flywheel extends SubsystemBase {
     m_pid.setOutputRange(FlywheelConstants.kMinOut, FlywheelConstants.kMaxOut);
   }
 
+  /**
+   * Gets the encoder's RPM
+   * @return the encoder's RPM.
+   */
   public double getRPM() {
     return m_enc.getVelocity();
-  } 
+  }
 
+  /**
+   * Manually set the velocity of the flywheel to full throttle. 
+   */
   public void set() {
     // m_flyLeft.set(0.5);
     m_flyLeft.set(1);

@@ -22,9 +22,7 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_VictorSPX m_leftSlave = new WPI_VictorSPX(DriveConstants.kLeftSlave);
   private final WPI_CANCoder m_rightEncoder = new WPI_CANCoder(DriveConstants.kRightEncoder);
   private final WPI_CANCoder m_leftEncoder = new WPI_CANCoder(DriveConstants.kLeftEncoder);
-
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
-
   /** Crreates a new Drivetrain Subsystem. */
   public Drivetrain() {
     m_rightMaster.configFactoryDefault();
@@ -51,6 +49,14 @@ public class Drivetrain extends SubsystemBase {
    */
   public void arcadeDrive(double forward, double rotation) {
     m_drive.arcadeDrive(forward, rotation);
+  }
+
+  public double getLeftEncoder() {
+    return m_leftEncoder.getPosition();
+  }
+
+  public double getRightEncoder() {
+    return m_rightEncoder.getPosition();
   }
 
   @Override

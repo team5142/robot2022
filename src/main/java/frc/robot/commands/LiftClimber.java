@@ -37,7 +37,7 @@ public class LiftClimber extends CommandBase {
   @Override
   public boolean isFinished() {
     if (m_climber.getPos() >= 0) {
-      //return true;
+      // return true;
     }
     return false;
   }

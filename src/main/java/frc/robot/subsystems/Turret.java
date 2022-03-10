@@ -1,22 +1,22 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.TurretConstants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.TurretConstants;
-import edu.wpi.first.math.util.Units;
-
+/**
+ * The Turret Class controls the rotational turret to shoot the balls. 
+ * 
+ * @author Spencer Greene & Gavin Popkin
+ */
 public class Turret extends SubsystemBase {
   private final CANSparkMax m_turret =
       new CANSparkMax(TurretConstants.kTurret, MotorType.kBrushless);
@@ -24,7 +24,10 @@ public class Turret extends SubsystemBase {
   private final RelativeEncoder m_encoder;
   public double desiredPos;
   private final PhotonCamera m_camera = new PhotonCamera("mmal_service_16.1");
-  /** Creates a new Turret. */
+
+  /**
+   * Constructor for a turret.
+   */
   public Turret() {
     m_turret.restoreFactoryDefaults();
     // m_turret.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
@@ -40,48 +43,81 @@ public class Turret extends SubsystemBase {
     m_camera.setLED(VisionLEDMode.kOn);
   }
 
+  /**
+   * Fetch the limelight target.
+   * @return the target from the PhotonVision.
+   */
   public PhotonTrackedTarget getResult() {
     return m_camera.getLatestResult().getBestTarget();
   }
 
+  /**
+   * Calculate the distance to the target.
+   * @return the distance in meters.
+   */
   public double getDistance() {
     double pitch;
-    if (m_camera.getLatestResult().hasTargets()){
+    if (m_camera.getLatestResult().hasTargets()) {
       pitch = m_camera.getLatestResult().getBestTarget().getPitch();
-      double distance = (TurretConstants.kGoalHeight-TurretConstants.kCameraHeight)/(Math.tan(TurretConstants.kCameraPitch + Units.degreesToRadians(pitch)));
+      double distance =
+          (TurretConstants.kGoalHeight - TurretConstants.kCameraHeight)
+              / (Math.tan(TurretConstants.kCameraPitch + Units.degreesToRadians(pitch)));
       return distance;
-    }
-    else {
+    } else {
       return 1e99;
-
     }
   }
+
+  /**
+   * Stop the turret motor.
+   */
   public void stopMotor() {
     m_turret.stopMotor();
   }
 
+  /**
+   * Manual method to turn the turret motor to the right at a quarter speed.
+   */
   public void turnRight() {
     m_turret.set(0.25);
   }
 
+  /**
+   * Manual method to turn the turret motor to the left at a quarter speed.
+   */
   public void turnLeft() {
     m_turret.set(-0.25);
   }
 
+  /**
+   * Method to zero the encoder's position.
+   */
   public void zeroEncoder() {
     m_encoder.setPosition(0);
   }
 
+  /**
+   * Get's the turret's encoder position.
+   * @return the encoder's position in native units.
+   */
   public double getPos() {
     return m_encoder.getPosition();
   }
 
+  /**
+   * Get's the turret's degrees.
+   * @return the encoder's position calculated in degrees.
+   */
   public double getDeg() {
     return m_encoder.getPosition() * 1.93;
   }
 
+  /**
+   * Sets the position of the turret to a positional reference.
+   * @param[in] target the desired position of the turret, in degrees.
+   */
   public void setTarget(double target) {
-    m_pidController.setReference(target/1.93, CANSparkMax.ControlType.kPosition);
+    m_pidController.setReference(target / 1.93, CANSparkMax.ControlType.kPosition);
   }
 
   @Override

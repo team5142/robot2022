@@ -10,6 +10,7 @@ import frc.robot.subsystems.Flywheel;
 public class FlywheelSpool extends CommandBase {
   /** Creates a new FlywheelSpool. */
   private final Flywheel m_fly;
+
   public FlywheelSpool(Flywheel fly) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_fly = fly;
@@ -18,8 +19,7 @@ public class FlywheelSpool extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

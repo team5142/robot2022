@@ -10,6 +10,7 @@ import frc.robot.subsystems.Turret;
 public class AlignTurret extends CommandBase {
   /** Creates a new AlignTurret. */
   private final Turret m_turret;
+
   public AlignTurret(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_turret = turret;
