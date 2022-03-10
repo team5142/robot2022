@@ -18,6 +18,7 @@ import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.RetractGrabber;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretRight;
+import frc.robot.commands.ZeroClimber;
 import frc.robot.commands.TurretPID;
 import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
@@ -64,6 +65,7 @@ public class RobotContainer {
   private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
   private final SpinConveyor m_manConv = new SpinConveyor(m_conveyor, m_opForward);
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
+  private final ZeroClimber m_ClimberZero = new ZeroClimber(m_climber);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_grabber, m_forwardAxis, m_rotationAxis);
@@ -81,13 +83,15 @@ public class RobotContainer {
     new JoystickButton(m_joystick, 5).whileHeld(m_liftClimber);
     new JoystickButton(m_joystick, 10).whileHeld(m_lowerClimber);
     new JoystickButton(m_joystick, 1).whenPressed(m_turrZero);
-    new JoystickButton(m_operator, 5).whenPressed(m_turrPID);
-    new JoystickButton(m_joystick, 7).whenPressed(m_grab);
-    new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
-    new JoystickButton(m_operator, 2).whileHeld(m_grab);   
-    new JoystickButton(m_operator, 4).whenPressed(m_flySpool);   
+    new JoystickButton(m_joystick, 7).whenPressed(m_grab); 
     new JoystickButton(m_joystick, 13).whenPressed(m_extendGrabber.withTimeout(2));
     new JoystickButton(m_joystick, 14).whenPressed(m_retractGrabber.withTimeout(2));
+
+    new JoystickButton(m_operator, 5).whenPressed(m_turrPID);
+    new JoystickButton(m_operator, 1).whileHeld(m_grab.alongWith(m_manConv));
+    new JoystickButton(m_operator, 2).whileHeld(m_grab);   
+    new JoystickButton(m_operator, 4).whenPressed(m_flySpool);
+    new JoystickButton(m_operator, 3).whenPressed(m_ClimberZero);
 
     m_drive.setDefaultCommand(m_arcadeDrive);
   }

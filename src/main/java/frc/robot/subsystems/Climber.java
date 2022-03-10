@@ -33,6 +33,10 @@ public class Climber extends SubsystemBase {
     m_master.set(ControlMode.PercentOutput, 0.5);
   }
 
+  public double getPos() {
+    return m_encoder.getPosition();
+  }
+
   public void stop() {
     m_master.stopMotor();
   }
