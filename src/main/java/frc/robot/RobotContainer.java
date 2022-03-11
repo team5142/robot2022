@@ -45,13 +45,13 @@ public class RobotContainer {
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
   private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
 
-  private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(5);
+  private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(3);
   private final DoubleSupplier m_opLeftHorizontal = () -> m_operator.getRawAxis(0);
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
   private final Conveyor m_conveyor = new Conveyor();
-  private final Grabber m_grabber = new Grabber(m_conveyor);
+  private final Grabber m_grabber = new Grabber();
   private final Turret m_turret = new Turret();
   private final Climber m_climber = new Climber();
   private final Flywheel m_fly = new Flywheel();
@@ -93,7 +93,8 @@ public class RobotContainer {
     new POVButton(m_operator, 0).whileHeld(m_liftClimber);
     new POVButton(m_operator, 180).whileHeld(m_lowerClimber);
     m_drive.setDefaultCommand(m_arcadeDrive);
-    m_grab.setDefaultCommand(m_grabber);
+    m_grabber.setDefaultCommand(m_grab);
+    m_conveyor.setDefaultCommand(m_manConv);
   }
 
   /**

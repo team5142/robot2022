@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FlywheelConstants;
@@ -30,7 +32,10 @@ public class Flywheel extends SubsystemBase {
   public Flywheel() {
     m_flyLeft.restoreFactoryDefaults();
     m_flyRight.restoreFactoryDefaults();
-    //m_flyRight.follow(m_flyLeft, true);
+    m_flyRight.setInverted(true);
+    m_flyLeft.setIdleMode(IdleMode.kCoast);
+    m_flyRight.setIdleMode(IdleMode.kCoast);
+    // m_flyRight.follow(m_flyLeft, true);
     m_enc = m_flyLeft.getEncoder();
     m_encRight = m_flyRight.getEncoder();
     m_pidLeft = m_flyLeft.getPIDController();
@@ -48,6 +53,7 @@ public class Flywheel extends SubsystemBase {
     m_pidRight.setIZone(FlywheelConstants.kIz);
     m_pidRight.setFF(FlywheelConstants.kFF);
     m_pidRight.setOutputRange(FlywheelConstants.kMinOut, FlywheelConstants.kMaxOut);
+    m_flyRight.setClosedLoopRampRate(0.5);
   }
 
   /**
@@ -62,20 +68,18 @@ public class Flywheel extends SubsystemBase {
    * Manually set the velocity of the flywheel to full throttle. 
    */
   public void set() {
-    // m_flyLeft.set(0.5);
-    m_flyLeft.set(1);
+    m_flyLeft.set(0.5);
+    m_flyRight.set(0.5);
   }
 
   public void stop() {
-    // m_flyLeft.stopMotor();
-    m_pidLeft.setReference(0, CANSparkMax.ControlType.kVelocity);
     m_flyLeft.stopMotor();
     m_flyRight.stopMotor();
   }
 
   public void setRPM() {
     m_pidLeft.setReference(5000, CANSparkMax.ControlType.kVelocity);
-    //m_pidRight.setReference(-5000, CANSparkMax.ControlType.kVelocity);
+    m_pidRight.setReference(5000, CANSparkMax.ControlType.kVelocity);
   }
 
   @Override

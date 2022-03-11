@@ -6,19 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Grabber;
 import java.util.function.DoubleSupplier;
 
 public class ArcadeDrive extends CommandBase {
   private final Drivetrain m_drive;
-  private final Grabber m_grab;
   private DoubleSupplier m_forward, m_rotation;
   /** Creates a new ArcadeDrive. */
   public ArcadeDrive(
-      Drivetrain drive, Grabber grab, DoubleSupplier forward, DoubleSupplier rotation) {
+      Drivetrain drive, DoubleSupplier forward, DoubleSupplier rotation) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_grab = grab;
     m_forward = forward;
     m_rotation = rotation;
     addRequirements(drive);

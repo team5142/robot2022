@@ -20,12 +20,10 @@ public class Grabber extends SubsystemBase {
   // GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
   private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
   private final AnalogInput m_ultrasound = new AnalogInput(Globals.kUltrasound);
-  private final Conveyor m_conveyor;
 
   /** Creates a new Grabber Subsystem. */
-  public Grabber(Conveyor conveyor) {
+  public Grabber() {
     m_ultrasound.setAverageBits(2);
-    m_conveyor = conveyor;
   }
 
   /** Extends the pneumatics to the grabber subsystem. */
@@ -62,15 +60,6 @@ public class Grabber extends SubsystemBase {
    */
   public int readUltrasound() {
     return m_ultrasound.getValue();
-  }
-
-  /**
-   * Gets the base photo sensor on the conveyor.
-   *
-   * @return boolean of photosensor state.
-   */
-  public boolean readBasePhoto() {
-    return m_conveyor.getBase();
   }
 
   @Override

@@ -24,7 +24,7 @@ public class AlignTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double yaw = m_turret.getResult().getYaw();
+    // double yaw = m_turret.getResult().getYaw();
   }
 
   // Called once the command ends or is interrupted.
