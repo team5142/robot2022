@@ -78,8 +78,8 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setRPM() {
-    m_pidLeft.setReference(5000, CANSparkMax.ControlType.kVelocity);
-    m_pidRight.setReference(5000, CANSparkMax.ControlType.kVelocity);
+    m_pidLeft.setReference(5300, CANSparkMax.ControlType.kVelocity);
+    m_pidRight.setReference(5300, CANSparkMax.ControlType.kVelocity);
   }
 
   @Override

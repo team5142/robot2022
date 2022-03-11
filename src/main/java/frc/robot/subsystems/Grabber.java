@@ -45,7 +45,7 @@ public class Grabber extends SubsystemBase {
 
   /** Turns the grabber motor on. */
   public void startGrab(double speed) {
-    m_spx.set(speed);
+    m_spx.set(-speed);
   }
 
   /** Turns the grabber motor off. */

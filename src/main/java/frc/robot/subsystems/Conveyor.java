@@ -55,7 +55,7 @@ public class Conveyor extends SubsystemBase {
   }
 
   public void manual(double speed) {
-    m_conveyor.set(ControlMode.PercentOutput, speed);
+    m_conveyor.set(ControlMode.PercentOutput, -speed);
   }
 
   @Override
