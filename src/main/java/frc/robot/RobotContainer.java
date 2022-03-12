@@ -6,10 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.DrivetrainFlip;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.FlywheelSpool;
 import frc.robot.commands.Grab;
@@ -70,6 +72,7 @@ public class RobotContainer {
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
   private final ZeroClimber m_climberZero = new ZeroClimber(m_climber);
   private final Shoot m_shoot = new Shoot(m_conveyor);
+  private final InstantCommand m_driveFlip = new InstantCommand(m_drive::toggleDriveDirction, m_drive);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
@@ -84,6 +87,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_joystick, 5).whenPressed(m_turrZero);
     new JoystickButton(m_joystick, 10).whenPressed(m_climberZero);
+    new JoystickButton(m_joystick, 2).whenPressed(m_driveFlip);
 
     new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
     new JoystickButton(m_operator, 8).whenPressed(m_extendGrabber.withTimeout(2));

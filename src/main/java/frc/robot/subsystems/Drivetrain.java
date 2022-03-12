@@ -5,7 +5,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -23,6 +26,7 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_CANCoder m_rightEncoder = new WPI_CANCoder(DriveConstants.kRightEncoder);
   private final WPI_CANCoder m_leftEncoder = new WPI_CANCoder(DriveConstants.kLeftEncoder);
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
+  private boolean isFlipped = false;
   /** Crreates a new Drivetrain Subsystem. */
   public Drivetrain() {
     m_rightMaster.configFactoryDefault();
@@ -39,6 +43,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftSlave.setInverted(InvertType.FollowMaster);
     m_rightMaster.setNeutralMode(NeutralMode.Coast);
     m_leftMaster.setNeutralMode(NeutralMode.Coast);
+    m_rightEncoder.configSensorDirection(true);
   }
 
   /**
@@ -48,7 +53,15 @@ public class Drivetrain extends SubsystemBase {
    * @param rotation the supplied speed along the z axis.
    */
   public void arcadeDrive(double forward, double rotation) {
-    m_drive.arcadeDrive(forward, rotation);
+    if (isFlipped) {
+      m_drive.arcadeDrive(forward, rotation);
+    } else{
+      m_drive.arcadeDrive(-forward, rotation);
+    }
+  }
+
+  public void toggleDriveDirction() {
+    isFlipped = !isFlipped;
   }
 
   public double getLeftEncoder() {
@@ -59,8 +72,16 @@ public class Drivetrain extends SubsystemBase {
     return m_rightEncoder.getPosition();
   }
 
+  public void zeroEncoders() {
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("LeftEnc", getLeftEncoder());
+    SmartDashboard.putNumber("RightEnc", getRightEncoder());
+    SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
   }
 }
