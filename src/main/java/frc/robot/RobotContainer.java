@@ -6,11 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.AutoFire;
 import frc.robot.commands.DrivetrainFlip;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.FlywheelSpool;
@@ -59,6 +62,7 @@ public class RobotContainer {
   private final Flywheel m_fly = new Flywheel();
 
   private final AutoDrive m_autoDrive = new AutoDrive(m_drive);
+  private final AutoFire m_autoFire = new AutoFire(m_conveyor, m_fly);
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
@@ -73,6 +77,7 @@ public class RobotContainer {
   private final ZeroClimber m_climberZero = new ZeroClimber(m_climber);
   private final Shoot m_shoot = new Shoot(m_conveyor);
   private final InstantCommand m_driveFlip = new InstantCommand(m_drive::toggleDriveDirction, m_drive);
+  private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire, m_autoDrive);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
@@ -109,6 +114,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoDrive;
+    return m_auto;
   }
 }

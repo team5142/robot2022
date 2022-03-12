@@ -6,41 +6,41 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Flywheel;
 
-public class AutoDrive extends CommandBase {
-  /** Creates a new AutoDrive. */
-  private final Drivetrain m_drive;
-
-  public AutoDrive(Drivetrain drive) {
+public class AutoFire extends CommandBase {
+  /** Creates a new AutoFire. */
+  private final Conveyor m_conveyor;
+  private final Flywheel m_fly;
+  public AutoFire(Conveyor conv, Flywheel fly) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    addRequirements(drive);
+    m_conveyor = conv;
+    m_fly = fly;
+    addRequirements(conv, fly);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drive.zeroEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(0.5, 0);
+    m_conveyor.manual(-0.5);
+    m_fly.setRPM();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
+    m_conveyor.manual(0);
+    m_fly.stop();
   }
 
   // Returns true when the command should end.
-  @Override
   public boolean isFinished() {
-    double avg = (m_drive.getLeftEncoder() + m_drive.getRightEncoder()) / 2;
-    if ((Math.abs(avg) > 30000) || Timer.getMatchTime() < 5) {
+    if (Timer.getMatchTime() < 10) {
       return true;
     }
     return false;
