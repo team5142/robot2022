@@ -18,7 +18,7 @@ public class ArcadeDrive extends CommandBase {
     m_drive = drive;
     m_forward = forward;
     m_rotation = rotation;
-    addRequirements(drive);
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.

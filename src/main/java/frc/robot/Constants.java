@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -22,6 +23,15 @@ public final class Constants {
     public static int kRightSlave = 3;
     public static int kLeftEncoder = 7;
     public static int kRightEncoder = 6;
+    public static double ksVolts = 0.22;
+    public static double ksVoltsSecondsPerMeter = 1.98;
+    public static double kaVoltsSecondsSquaredPerMeter = 0.2;
+    public static double kPDrive = 0;
+    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(21.75)); 
+    public static double kMaxSpeedMetersSecond = 0.5;
+    public static double kMaxAcceleration = 0.5;
+    public static double kRamseteB = 2;
+    public static double kRamseteZeta = 0.7;
   }
 
   public static class GrabberConstants {

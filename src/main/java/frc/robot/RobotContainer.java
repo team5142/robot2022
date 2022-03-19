@@ -4,14 +4,26 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoDriveForward;
@@ -39,6 +51,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Turret;
+
+import java.util.List;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -132,6 +146,48 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_auto;
+    // return m_auto;
+    var autoVoltageConstraint = 
+      new DifferentialDriveVoltageConstraint(
+        new SimpleMotorFeedforward(
+          DriveConstants.ksVolts,
+          DriveConstants.ksVoltsSecondsPerMeter,
+          DriveConstants.kaVoltsSecondsSquaredPerMeter),
+        DriveConstants.kKinematics,
+        10);
+    
+    TrajectoryConfig config = 
+      new TrajectoryConfig(
+        DriveConstants.kMaxSpeedMetersSecond, 
+        DriveConstants.kMaxAcceleration)
+        .setKinematics(DriveConstants.kKinematics)
+        .addConstraint(autoVoltageConstraint);
+
+    Trajectory exampleTrajectory =
+      TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+          List.of(new Translation2d(1,1)),
+          // End 3 meters straight ahead of where we started, facing forward
+          new Pose2d(3, 0, new Rotation2d(0)),
+          // Pass config
+          config);
+
+    RamseteCommand ramseteCommand =
+      new RamseteCommand(
+        exampleTrajectory,
+        m_drive::getPose, 
+        new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta), 
+        new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.ksVoltsSecondsPerMeter, DriveConstants.kaVoltsSecondsSquaredPerMeter), 
+        DriveConstants.kKinematics, 
+        m_drive::getWheelSpeeds, 
+        new PIDController(DriveConstants.kPDrive, 0, 0), 
+        new PIDController(DriveConstants.kPDrive, 0, 0), 
+        m_drive::tankDriveVolts, 
+        m_drive);
+    m_drive.resetOdometry(exampleTrajectory.getInitialPose());
+    return ramseteCommand.andThen(() ->m_drive.tankDriveVolts(0, 0));
   }
 }
