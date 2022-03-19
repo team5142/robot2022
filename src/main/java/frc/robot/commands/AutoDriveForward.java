@@ -21,7 +21,7 @@ public class AutoDriveForward extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.zeroEncoders();
+    m_drive.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,7 +39,7 @@ public class AutoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double avg = (m_drive.getLeftEncoder() + m_drive.getRightEncoder()) / 2;
+    double avg = (m_drive.getLeftPos() + m_drive.getRightPos()) / 2;
     if ((Math.abs(avg) > 450)) {
       return true;
     }

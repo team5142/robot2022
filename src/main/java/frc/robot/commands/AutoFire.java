@@ -28,7 +28,7 @@ public class AutoFire extends CommandBase {
   @Override
   public void execute() {
     m_conveyor.manual(-0.5);
-    m_fly.setRPM();
+    m_fly.setRPM(2000);
   }
 
   // Called once the command ends or is interrupted.

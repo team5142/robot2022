@@ -51,11 +51,14 @@ public final class Constants {
   public static class FlywheelConstants {
     public static int kFlyLeft = 40;
     public static int kFlyRight = 41;
-    public static double kP = 0.0004;
+    public static double kP = 0.15543;
     public static double kI = 0;
     public static double kD = 0;
     public static double kIz = 0;
     public static double kFF = 0.000195;
+    public static double kS = 0.090452;
+    public static double kV = 0.26828;
+    public static double kA = 0.0073925;
     public static double kMaxOut = 1;
     public static double kMinOut = -1;
   }
