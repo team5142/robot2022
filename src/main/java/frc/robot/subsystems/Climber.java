@@ -11,12 +11,15 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
+  private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward, ClimberConstants.kSolReverse);
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
-
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
   private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
 
@@ -28,15 +31,27 @@ public class Climber extends SubsystemBase {
   }
 
   public void liftClimber() {
-    m_master.set(ControlMode.PercentOutput, -0.5);
+    m_master.set(ControlMode.PercentOutput, -1);
   }
 
   public void lowerClimber() {
-    m_master.set(ControlMode.PercentOutput, 0.5);
+    m_master.set(ControlMode.PercentOutput, 1);
   }
 
   public void zeroEncoder() {
     m_encoder.setPosition(0);
+  }
+
+  public void brakeOn() {
+    m_sol.set(Value.kReverse);
+  }
+
+  public void brakeRev() {
+    m_sol.set(Value.kForward);
+  }
+
+  public void brakeOff() {
+    m_sol.set(Value.kOff);
   }
 
   public double getPos() {

@@ -69,6 +69,8 @@ public final class Constants {
     public static int kClimberMasterSRX = 10;
     public static int kClimberFollowerSRX = 11;
     public static int kEncoder = 9;
+    public static int kSolForward = 2;
+    public static int kSolReverse = 3;
   }
 
   public static class Globals {

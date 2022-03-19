@@ -4,45 +4,37 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Climber;
 
-public class AutoFire extends CommandBase {
-  /** Creates a new AutoFire. */
-  private final Conveyor m_conveyor;
-  private final Flywheel m_fly;
-  public AutoFire(Conveyor conv, Flywheel fly) {
+public class UnbrakeClimber extends CommandBase {
+  /** Creates a new BrakeClimber. */
+  private final Climber m_climber;
+  public UnbrakeClimber(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_conveyor = conv;
-    m_fly = fly;
-    addRequirements(conv, fly);
+    m_climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_climber.brakeRev();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_conveyor.manual(-0.5);
-    m_fly.setRPM();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_conveyor.manual(0);
-    m_fly.stop();
+    m_climber.brakeOff();
   }
 
   // Returns true when the command should end.
+  @Override
   public boolean isFinished() {
-    if (Timer.getMatchTime() < 12) {
-      return true;
-    }
     return false;
   }
 }

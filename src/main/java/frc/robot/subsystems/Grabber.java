@@ -69,8 +69,8 @@ public class Grabber extends SubsystemBase {
     isClose = (readUltrasound() < 1600) ? true : false;
     SmartDashboard.putBoolean("Grabber State", isExtended);
     SmartDashboard.putBoolean("Range State", isClose);
-    if (isExtended && isClose) {
-      retractGrabber();
-    }
+    // if (isExtended && isClose) {
+    //   retractGrabber();
+    // }
   }
 }

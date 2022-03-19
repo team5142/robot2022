@@ -6,41 +6,41 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Drivetrain;
 
-public class AutoFire extends CommandBase {
-  /** Creates a new AutoFire. */
-  private final Conveyor m_conveyor;
-  private final Flywheel m_fly;
-  public AutoFire(Conveyor conv, Flywheel fly) {
+public class AutoDriveForward extends CommandBase {
+  /** Creates a new AutoDrive. */
+  private final Drivetrain m_drive;
+
+  public AutoDriveForward(Drivetrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_conveyor = conv;
-    m_fly = fly;
-    addRequirements(conv, fly);
+    m_drive = drive;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_drive.zeroEncoders();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_conveyor.manual(-0.5);
-    m_fly.setRPM();
+    m_drive.arcadeDrive(.4, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_conveyor.manual(0);
-    m_fly.stop();
+    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
+  @Override
   public boolean isFinished() {
-    if (Timer.getMatchTime() < 12) {
+    double avg = (m_drive.getLeftEncoder() + m_drive.getRightEncoder()) / 2;
+    if ((Math.abs(avg) > 450)) {
       return true;
     }
     return false;

@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +28,11 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_CANCoder m_rightEncoder = new WPI_CANCoder(DriveConstants.kRightEncoder);
   private final WPI_CANCoder m_leftEncoder = new WPI_CANCoder(DriveConstants.kLeftEncoder);
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
+  private final AHRS m_nav = new AHRS(SerialPort.Port.kMXP);
   private boolean isFlipped = false;
+  public double kP = 0;
+  //private boolean quickTurn = false;
+
   /** Crreates a new Drivetrain Subsystem. */
   public Drivetrain() {
     m_rightMaster.configFactoryDefault();
@@ -44,6 +50,8 @@ public class Drivetrain extends SubsystemBase {
     m_rightMaster.setNeutralMode(NeutralMode.Coast);
     m_leftMaster.setNeutralMode(NeutralMode.Coast);
     m_rightEncoder.configSensorDirection(true);
+
+    m_nav.reset();
   }
 
   /**
@@ -58,6 +66,10 @@ public class Drivetrain extends SubsystemBase {
     } else{
       m_drive.arcadeDrive(-forward, rotation);
     }
+  }
+
+  public void resetNav() {
+    m_nav.reset();
   }
 
   public void toggleDriveDirction() {
@@ -77,11 +89,16 @@ public class Drivetrain extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
+  public double getHeading() {
+    return m_nav.getAngle();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("LeftEnc", getLeftEncoder());
     SmartDashboard.putNumber("RightEnc", getRightEncoder());
     SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+    SmartDashboard.putNumber("kP", kP);
   }
 }

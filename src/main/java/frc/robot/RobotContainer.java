@@ -9,11 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.AutoDriveForward;
 import frc.robot.commands.AutoFire;
+import frc.robot.commands.AutoHarvest;
+import frc.robot.commands.AutoTurn;
+import frc.robot.commands.BrakeClimber;
 import frc.robot.commands.DrivetrainFlip;
 import frc.robot.commands.ExtendGrabber;
 import frc.robot.commands.FlywheelSpool;
@@ -26,6 +31,7 @@ import frc.robot.commands.SpinConveyor;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretPID;
 import frc.robot.commands.TurretRight;
+import frc.robot.commands.UnbrakeClimber;
 import frc.robot.commands.ZeroClimber;
 import frc.robot.commands.ZeroTurret;
 import frc.robot.subsystems.Climber;
@@ -45,10 +51,12 @@ import java.util.function.DoubleSupplier;
 public class RobotContainer {
   // Joysticks
   private final Joystick m_joystick = new Joystick(0);
+  private final Joystick m_joystickR = new Joystick(2);
   private final Joystick m_operator = new Joystick(1);
 
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
-  private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
+  //private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
+  private final DoubleSupplier m_rotationAxis = () -> m_joystickR.getRawAxis(0);
 
   private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(3);
   private final DoubleSupplier m_opLeftHorizontal = () -> m_operator.getRawAxis(0);
@@ -62,7 +70,10 @@ public class RobotContainer {
   private final Flywheel m_fly = new Flywheel();
 
   private final AutoDrive m_autoDrive = new AutoDrive(m_drive);
+  private final AutoDriveForward m_autoForward = new AutoDriveForward(m_drive);
   private final AutoFire m_autoFire = new AutoFire(m_conveyor, m_fly);
+  private final AutoHarvest m_autoHarv = new AutoHarvest(m_grabber);
+  private final AutoTurn m_autoTurn = new AutoTurn(m_drive);
   private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
   private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
   private final Grab m_grab = new Grab(m_grabber, m_opForward);
@@ -76,15 +87,21 @@ public class RobotContainer {
   private final FlywheelSpool m_flySpool = new FlywheelSpool(m_fly);
   private final ZeroClimber m_climberZero = new ZeroClimber(m_climber);
   private final Shoot m_shoot = new Shoot(m_conveyor);
+  private final BrakeClimber m_brakeClimb = new BrakeClimber(m_climber);
+  private final UnbrakeClimber m_unbrakeClimb = new UnbrakeClimber(m_climber);
   private final InstantCommand m_driveFlip = new InstantCommand(m_drive::toggleDriveDirction, m_drive);
-  private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire, m_autoDrive);
+  private final InstantCommand m_resetNav = new InstantCommand(m_drive::resetNav, m_drive);
+  private final ParallelCommandGroup m_autoHarvDrive = new ParallelCommandGroup(m_autoHarv, m_autoDrive);
+  // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoForward, m_autoFire, m_autoHarvDrive);
+  private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire, m_resetNav, m_autoTurn, m_autoHarvDrive);
+  // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire, m_autoHarvDrive);
 
   private final ArcadeDrive m_arcadeDrive =
       new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
+    // Configure the button bindings 
     configureButtonBindings();
   }
 
@@ -92,7 +109,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_joystick, 5).whenPressed(m_turrZero);
     new JoystickButton(m_joystick, 10).whenPressed(m_climberZero);
-    new JoystickButton(m_joystick, 2).whenPressed(m_driveFlip);
+    new JoystickButton(m_joystick, 1).whenPressed(m_driveFlip);
 
     new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
     new JoystickButton(m_operator, 8).whenPressed(m_extendGrabber.withTimeout(2));
@@ -102,6 +119,8 @@ public class RobotContainer {
     new JoystickButton(m_operator, 7).whileHeld(m_shoot);
     new POVButton(m_operator, 0).whileHeld(m_liftClimber);
     new POVButton(m_operator, 180).whileHeld(m_lowerClimber);
+    new POVButton(m_operator, 90).whenPressed(m_brakeClimb.withTimeout(2));
+    new POVButton(m_operator, 270).whenPressed(m_unbrakeClimb.withTimeout(2));
     m_drive.setDefaultCommand(m_arcadeDrive);
     m_grabber.setDefaultCommand(m_grab);
     m_conveyor.setDefaultCommand(m_manConv);
