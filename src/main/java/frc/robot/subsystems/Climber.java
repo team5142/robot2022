@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -56,6 +58,14 @@ public class Climber extends SubsystemBase {
 
   public double getPos() {
     return m_encoder.getPosition();
+  }
+
+  public boolean getTop() {
+    return (getPos() >= 1880) ? true : false;
+  }
+
+  public boolean getBottom() {
+    return (getPos() <= 0) ? true : false;
   }
 
   public void stop() {
