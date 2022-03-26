@@ -30,8 +30,6 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_VictorSPX m_rightSlave = new WPI_VictorSPX(DriveConstants.kRightSlave);
   private final WPI_TalonSRX m_leftMaster = new WPI_TalonSRX(DriveConstants.kLeftMaster);
   private final WPI_VictorSPX m_leftSlave = new WPI_VictorSPX(DriveConstants.kLeftSlave);
-  private final WPI_CANCoder m_rightEncoder = new WPI_CANCoder(DriveConstants.kRightEncoder);
-  private final WPI_CANCoder m_leftEncoder = new WPI_CANCoder(DriveConstants.kLeftEncoder);
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
   private final AHRS m_nav = new AHRS(SerialPort.Port.kMXP);
   private boolean isFlipped = false;
@@ -56,7 +54,6 @@ public class Drivetrain extends SubsystemBase {
     m_leftSlave.setInverted(InvertType.FollowMaster);
     m_rightMaster.setNeutralMode(NeutralMode.Brake);
     m_leftMaster.setNeutralMode(NeutralMode.Brake);
-    m_rightEncoder.configSensorDirection(true);
 
     m_nav.reset();
     m_odometry = new DifferentialDriveOdometry(m_nav.getRotation2d());
@@ -86,26 +83,21 @@ public class Drivetrain extends SubsystemBase {
     m_nav.reset();
   }
 
-  public void resetEncoders() {
-    m_leftEncoder.setPosition(0);
-    m_rightEncoder.setPosition(0);
-  }
-
   public void toggleDriveDirction() {
     isFlipped = !isFlipped;
   }
 
   public double getLeftEncoder() {
-    return m_leftEncoder.getPosition();
+    return m_leftMaster.getSelectedSensorPosition();
   }
 
   public double getRightEncoder() {
-    return m_rightEncoder.getPosition();
+    return m_rightMaster.getSelectedSensorPosition();
   }
 
   public void zeroEncoders() {
-    m_leftEncoder.setPosition(0);
-    m_rightEncoder.setPosition(0);
+    m_rightMaster.setSelectedSensorPosition(0);
+    m_leftMaster.setSelectedSensorPosition(0);
   }
 
   public double getHeading() {
@@ -126,11 +118,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(nativeUnitsToDistanceMeters(m_leftEncoder.getVelocity()), nativeUnitsToDistanceMeters(m_rightEncoder.getVelocity()));
+    return new DifferentialDriveWheelSpeeds(nativeUnitsToDistanceMeters(m_leftMaster.getSelectedSensorVelocity()), nativeUnitsToDistanceMeters(m_rightMaster.getSelectedSensorVelocity()));
   }
 
   public void resetOdometry(Pose2d pose) {
-    resetEncoders();
+    zeroEncoders();
     m_odometry.resetPosition(pose, m_nav.getRotation2d());
   }
 
@@ -159,10 +151,14 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_odometry.update(m_nav.getRotation2d(), nativeUnitsToDistanceMeters(m_leftEncoder.getPosition()), nativeUnitsToDistanceMeters(m_rightEncoder.getPosition()));
+    m_odometry.update(m_nav.getRotation2d(), nativeUnitsToDistanceMeters(m_leftMaster.getSelectedSensorPosition()), nativeUnitsToDistanceMeters(m_rightMaster.getSelectedSensorPosition()));
     SmartDashboard.putNumber("LeftEnc", getLeftEncoder());
     SmartDashboard.putNumber("RightEnc", getRightEncoder());
     SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
     SmartDashboard.putNumber("kP", kP);
+    SmartDashboard.putNumber("RightMasterOut", m_rightMaster.getMotorOutputVoltage());
+    SmartDashboard.putNumber("RightMasterBus", m_rightMaster.getSupplyCurrent());
+    SmartDashboard.putNumber("LeftMasterOut", m_leftMaster.getMotorOutputVoltage());
+    SmartDashboard.putNumber("RightMasterOut", m_leftMaster.getSupplyCurrent());
   }
 }

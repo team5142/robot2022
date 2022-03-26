@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward, ClimberConstants.kSolReverse);
+  // private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward, ClimberConstants.kSolReverse);
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
   private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
@@ -43,15 +43,15 @@ public class Climber extends SubsystemBase {
   }
 
   public void brakeOn() {
-    m_sol.set(Value.kReverse);
+    // m_sol.set(Value.kReverse);
   }
 
   public void brakeRev() {
-    m_sol.set(Value.kForward);
+    // m_sol.set(Value.kForward);
   }
 
   public void brakeOff() {
-    m_sol.set(Value.kOff);
+    // m_sol.set(Value.kOff);
   }
 
   public double getPos() {

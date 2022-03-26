@@ -19,7 +19,7 @@ public class Grabber extends SubsystemBase {
   private static Boolean isExtended = false;
   private static Boolean isClose = false;
 
-  private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
+  // private final DoubleSolenoid m_sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, GrabberConstants.kSolForward, GrabberConstants.kSolReverse);
   private final WPI_VictorSPX m_spx = new WPI_VictorSPX(GrabberConstants.kGrabberSPX);
   private final AnalogInput m_ultrasound = new AnalogInput(Globals.kUltrasound);
 
@@ -30,19 +30,19 @@ public class Grabber extends SubsystemBase {
 
   /** Extends the pneumatics to the grabber subsystem. */
   public void extendGrabber() {
-    m_sol.set(Value.kForward);
+    // m_sol.set(Value.kForward);
     isExtended = true;
   }
 
   /** Retracts the pneumatics to the grabber subsystem. */
   public void retractGrabber() {
-    m_sol.set(Value.kReverse);
+    // m_sol.set(Value.kReverse);
     isExtended = false;
   }
 
   /** Toggles the grabber pneumatics off. */
   public void offGrabber() {
-    m_sol.set(Value.kOff);
+    // m_sol.set(Value.kOff);
   }
 
   /** Turns the grabber motor on. */

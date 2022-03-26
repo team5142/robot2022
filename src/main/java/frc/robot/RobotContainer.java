@@ -68,6 +68,7 @@ public class RobotContainer {
   private final Joystick m_operator = new Joystick(1);
 
   private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
+  private final DoubleSupplier m_rotAxis = () -> m_joystick.getRawAxis(0);
   //private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
   private final DoubleSupplier m_rotationAxis = () -> m_joystickR.getRawAxis(0);
 
@@ -110,7 +111,7 @@ public class RobotContainer {
   // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire, m_autoHarvDrive);
 
   private final ArcadeDrive m_arcadeDrive =
-      new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
+      new ArcadeDrive(m_drive, m_forwardAxis, m_rotAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
