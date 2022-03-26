@@ -4,13 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
 
 public class AutoHarvest extends CommandBase {
   /** Creates a new AutoHarvest. */
   private final Grabber m_grabber;
+
   public AutoHarvest(Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_grabber = grabber;

@@ -4,17 +4,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
-import org.photonvision.PhotonCamera;
-import org.photonvision.common.hardware.VisionLEDMode;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 /**
- * The Turret Class controls the rotational turret to shoot the balls. 
- * 
+ * The Turret Class controls the rotational turret to shoot the balls.
+ *
  * @author Spencer Greene & Gavin Popkin
  */
 public class Turret extends SubsystemBase {
@@ -25,9 +21,7 @@ public class Turret extends SubsystemBase {
   public double desiredPos;
   // private final PhotonCamera m_camera = new PhotonCamera("mmal_service_16.1");
 
-  /**
-   * Constructor for a turret.
-   */
+  /** Constructor for a turret. */
   public Turret() {
     m_turret.restoreFactoryDefaults();
     // m_turret.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
@@ -45,6 +39,7 @@ public class Turret extends SubsystemBase {
 
   /**
    * Fetch the limelight target.
+   *
    * @return the target from the PhotonVision.
    */
   // public PhotonTrackedTarget getResult() {
@@ -53,6 +48,7 @@ public class Turret extends SubsystemBase {
 
   /**
    * Calculate the distance to the target.
+   *
    * @return the distance in meters.
    */
   // public double getDistance() {
@@ -68,36 +64,29 @@ public class Turret extends SubsystemBase {
   //   }
   // }
 
-  /**
-   * Stop the turret motor.
-   */
+  /** Stop the turret motor. */
   public void stopMotor() {
     m_turret.stopMotor();
   }
 
-  /**
-   * Manual method to turn the turret motor to the right at a quarter speed.
-   */
+  /** Manual method to turn the turret motor to the right at a quarter speed. */
   public void turnRight() {
     m_turret.set(0.25);
   }
 
-  /**
-   * Manual method to turn the turret motor to the left at a quarter speed.
-   */
+  /** Manual method to turn the turret motor to the left at a quarter speed. */
   public void turnLeft() {
     m_turret.set(-0.25);
   }
 
-  /**
-   * Method to zero the encoder's position.
-   */
+  /** Method to zero the encoder's position. */
   public void zeroEncoder() {
     m_encoder.setPosition(0);
   }
 
   /**
    * Get's the turret's encoder position.
+   *
    * @return the encoder's position in native units.
    */
   public double getPos() {
@@ -106,6 +95,7 @@ public class Turret extends SubsystemBase {
 
   /**
    * Get's the turret's degrees.
+   *
    * @return the encoder's position calculated in degrees.
    */
   public double getDeg() {
@@ -114,6 +104,7 @@ public class Turret extends SubsystemBase {
 
   /**
    * Sets the position of the turret to a positional reference.
+   *
    * @param[in] target the desired position of the turret, in degrees.
    */
   public void setTarget(double target) {

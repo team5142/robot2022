@@ -12,8 +12,7 @@ public class ArcadeDrive extends CommandBase {
   private final Drivetrain m_drive;
   private DoubleSupplier m_forward, m_rotation;
   /** Creates a new ArcadeDrive. */
-  public ArcadeDrive(
-      Drivetrain drive, DoubleSupplier forward, DoubleSupplier rotation) {
+  public ArcadeDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier rotation) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_forward = forward;

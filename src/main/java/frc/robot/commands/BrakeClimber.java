@@ -10,6 +10,7 @@ import frc.robot.subsystems.Climber;
 public class BrakeClimber extends CommandBase {
   /** Creates a new BrakeClimber. */
   private final Climber m_climber;
+
   public BrakeClimber(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;

@@ -5,11 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,12 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FlywheelConstants;
 
 /**
- * The Flywheel Class controls the flywheel shooter. 
- * 
+ * The Flywheel Class controls the flywheel shooter.
+ *
  * @author Spencer Greene & Gavin Popkin
  */
 public class Flywheel extends SubsystemBase {
-  private final CANSparkMax m_flyLeft; 
+  private final CANSparkMax m_flyLeft;
   private final CANSparkMax m_flyRight;
 
   private final RelativeEncoder m_leftEncoder;
@@ -43,12 +41,16 @@ public class Flywheel extends SubsystemBase {
     m_leftEncoder = m_flyLeft.getEncoder();
     m_rightEncoder = m_flyRight.getEncoder();
 
-    m_controller = new PIDController(FlywheelConstants.kP, FlywheelConstants.kI, FlywheelConstants.kD);
-    m_feedforward = new SimpleMotorFeedforward(FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
+    m_controller =
+        new PIDController(FlywheelConstants.kP, FlywheelConstants.kI, FlywheelConstants.kD);
+    m_feedforward =
+        new SimpleMotorFeedforward(
+            FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
   }
 
   /**
    * Gets the encoder's RPM
+   *
    * @return the encoder's RPM.
    */
   public double getLeftRPM() {
@@ -59,17 +61,13 @@ public class Flywheel extends SubsystemBase {
     return m_rightEncoder.getVelocity();
   }
 
-  /**
-   * Manually sets the throttle of the flywheel.
-   */
+  /** Manually sets the throttle of the flywheel. */
   public void set() {
     m_flyLeft.set(0.5);
     m_flyRight.set(0.5);
   }
 
-  /**
-   * Stops the flywheel.
-   */
+  /** Stops the flywheel. */
   public void stop() {
     m_flyLeft.stopMotor();
     m_flyRight.stopMotor();
@@ -77,10 +75,13 @@ public class Flywheel extends SubsystemBase {
 
   /**
    * Set the RPM of the flywheel.
+   *
    * @param desiredVelocity
    */
   public void setRPM(double desiredVelocity) {
-    m_flyLeft.setVoltage(m_controller.calculate(m_leftEncoder.getVelocity(), desiredVelocity) + m_feedforward.calculate(desiredVelocity));
+    m_flyLeft.setVoltage(
+        m_controller.calculate(m_leftEncoder.getVelocity(), desiredVelocity)
+            + m_feedforward.calculate(desiredVelocity));
   }
 
   @Override

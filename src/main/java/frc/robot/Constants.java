@@ -21,13 +21,12 @@ public final class Constants {
     public static int kLeftSlave = 5;
     public static int kRightMaster = 2;
     public static int kRightSlave = 3;
-    public static int kLeftEncoder = 7;
-    public static int kRightEncoder = 6;
     public static double ksVolts = 0.22;
     public static double ksVoltsSecondsPerMeter = 1.98;
     public static double kaVoltsSecondsSquaredPerMeter = 0.2;
     public static double kPDrive = 0;
-    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(21.75)); 
+    public static final DifferentialDriveKinematics kKinematics =
+        new DifferentialDriveKinematics(Units.inchesToMeters(21.75));
     public static double kMaxSpeedMetersSecond = 0.5;
     public static double kMaxAcceleration = 0.5;
     public static double kRamseteB = 2;

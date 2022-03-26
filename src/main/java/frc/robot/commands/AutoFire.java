@@ -12,7 +12,9 @@ import frc.robot.subsystems.Flywheel;
 public class AutoFire extends CommandBase {
   /** Creates a new AutoFire. */
   private final Conveyor m_conveyor;
+
   private final Flywheel m_fly;
+
   public AutoFire(Conveyor conv, Flywheel fly) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_conveyor = conv;
