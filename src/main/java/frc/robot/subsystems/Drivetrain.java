@@ -12,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
@@ -27,8 +28,8 @@ public class Drivetrain extends SubsystemBase {
 
   private final DifferentialDrive m_drive;
   private final AHRS m_nav;
+  private final Field2d m_field = new Field2d();
   public final DifferentialDriveOdometry m_odometry;
-  private boolean isFlipped = false;
   // private boolean quickTurn = false;
 
   /** Crreates a new Drivetrain Subsystem. */
@@ -77,11 +78,7 @@ public class Drivetrain extends SubsystemBase {
    * @param rotation the supplied speed along the z axis.
    */
   public void arcadeDrive(double forward, double rotation) {
-    if (isFlipped) {
-      m_drive.arcadeDrive(forward, rotation);
-    } else {
-      m_drive.arcadeDrive(-forward, rotation);
-    }
+    m_drive.arcadeDrive(forward, rotation);
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -99,16 +96,12 @@ public class Drivetrain extends SubsystemBase {
     m_rightMaster.setSelectedSensorPosition(0);
   }
 
-  public void toggleDriveDirction() {
-    isFlipped = !isFlipped;
-  }
-
   public double getLeftPos() {
-    return m_leftMaster.getSensorCollection().getQuadraturePosition();
+    return m_leftMaster.getSelectedSensorPosition();
   }
 
   public double getRightPos() {
-    return m_rightMaster.getSensorCollection().getQuadraturePosition();
+    return m_rightMaster.getSelectedSensorPosition();
   }
 
   public double getHeading() {
@@ -125,8 +118,8 @@ public class Drivetrain extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-        nativeUnitsToDistanceMeters(m_leftMaster.getSensorCollection().getQuadratureVelocity()),
-        nativeUnitsToDistanceMeters(m_rightMaster.getSensorCollection().getQuadratureVelocity()));
+        nativeUnitsToDistanceMeters(m_leftMaster.getSelectedSensorVelocity()),
+        nativeUnitsToDistanceMeters(m_rightMaster.getSelectedSensorVelocity()));
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -142,19 +135,10 @@ public class Drivetrain extends SubsystemBase {
     return sensorCounts;
   }
 
-  private int velocityToNativeUnits(double velocityMetersPerSecond) {
-    double wheelRotationsPerSecond =
-        velocityMetersPerSecond / (2 * Math.PI * Units.inchesToMeters(3));
-    double motorRotationsPerSecond = wheelRotationsPerSecond * 10.71;
-    double motorRotationsPer100ms = motorRotationsPerSecond / 10;
-    int sensorCountsPer100ms = (int) (motorRotationsPer100ms * 4096);
-    return sensorCountsPer100ms;
-  }
-
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
     double motorRotations = (double) sensorCounts / 4096;
     double wheelRotations = motorRotations / 10.71;
-    double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(3));
+    double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(6));
     return positionMeters;
   }
 
@@ -167,6 +151,10 @@ public class Drivetrain extends SubsystemBase {
         nativeUnitsToDistanceMeters(getRightPos()));
     SmartDashboard.putNumber("LeftEnc", getLeftPos());
     SmartDashboard.putNumber("RightEnc", getRightPos());
+    SmartDashboard.putNumber("PosX", getPose().getX());
+    SmartDashboard.putNumber("PosY", getPose().getY());
     SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+    m_field.setRobotPose(getPose());
+    SmartDashboard.putData(m_field);
   }
 }

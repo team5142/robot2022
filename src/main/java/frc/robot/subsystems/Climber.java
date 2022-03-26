@@ -24,13 +24,13 @@ public class Climber extends SubsystemBase {
 
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
-  private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
+  // private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
 
   public Climber() {
     m_follower.follow(m_master);
     m_master.setNeutralMode(NeutralMode.Brake);
     m_follower.setNeutralMode(NeutralMode.Brake);
-    m_encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+    // m_encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
   }
 
   public void liftClimber() {
@@ -42,7 +42,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void zeroEncoder() {
-    m_encoder.setPosition(0);
+    // m_encoder.setPosition(0);
   }
 
   public void brakeOn() {
@@ -58,7 +58,8 @@ public class Climber extends SubsystemBase {
   }
 
   public double getPos() {
-    return m_encoder.getPosition();
+    // return m_encoder.getPosition();
+    return 1;
   }
 
   public boolean getTop() {
