@@ -90,9 +90,10 @@ public class Flywheel extends SubsystemBase {
     m_shooter.setVoltage(
         m_shooterController.calculate(m_shooterEnc.getVelocity(), desiredVelocity)
             + m_shooterFeedForward.calculate(desiredVelocity));
-    m_bumper.setVoltage(
-        m_bumperController.calculate(m_bumperEnc.getVelocity(), desiredVelocity)
-            + m_bumperFeedForward.calculate(desiredVelocity));
+    // m_bumper.setVoltage(
+    //     m_bumperController.calculate(m_bumperEnc.getVelocity(), desiredVelocity)
+    //         + m_bumperFeedForward.calculate(desiredVelocity));
+    m_bumper.set(0.75);
   }
 
   @Override
