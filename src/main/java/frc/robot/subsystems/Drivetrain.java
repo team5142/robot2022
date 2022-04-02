@@ -30,6 +30,7 @@ public class Drivetrain extends SubsystemBase {
   private final DifferentialDrive m_drive;
   private final AHRS m_nav;
   private final Field2d m_field = new Field2d();
+
   private final DifferentialDriveOdometry m_odometry;
 
   /** Crreates a new Drivetrain Subsystem. */
@@ -123,12 +124,8 @@ public class Drivetrain extends SubsystemBase {
     return m_nav.getRotation2d().getDegrees();
   }
 
-  public double getTurnRate() {
-    return -m_nav.getRate();
-  }
-
-  private double nativeUnitsToDistanceMeters(double sensorCounts) {
-    double motorRotations = (double) sensorCounts / 4096;
+  private double nativeUnitsToDistanceMeters(double sensorCounts){
+    double motorRotations = (double)sensorCounts / 4096;
     double wheelRotations = motorRotations / 10.71;
     double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(6));
     return positionMeters;
@@ -136,7 +133,6 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     m_odometry.update(
         m_nav.getRotation2d(),
         nativeUnitsToDistanceMeters(getLeftDistance()),

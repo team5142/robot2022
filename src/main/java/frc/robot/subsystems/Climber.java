@@ -18,6 +18,7 @@ public class Climber extends SubsystemBase {
   //         PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward,
   // ClimberConstants.kSolReverse);
 
+
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
 
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
