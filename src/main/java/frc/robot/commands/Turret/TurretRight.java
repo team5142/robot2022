@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Turret;
 
-public class LowerClimber extends CommandBase {
-  /** Creates a new LowerClimber. */
-  private final Climber m_climber;
+public class TurretRight extends CommandBase {
+  /** Creates a new TurretRight. */
+  private final Turret m_turret;
 
-  public LowerClimber(Climber climber) {
+  public TurretRight(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climber = climber;
-    addRequirements(climber);
+    m_turret = turret;
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
@@ -24,19 +24,19 @@ public class LowerClimber extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.lowerClimber();
+    m_turret.turnRight();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climber.stop();
+    m_turret.stopMotor();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_climber.getPos() <= 0) {
+    if (m_turret.getPos() >= 51) {
       return true;
     }
     return false;

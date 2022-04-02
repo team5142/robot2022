@@ -20,30 +20,38 @@ import frc.robot.Constants.FlywheelConstants;
  * @author Spencer Greene & Gavin Popkin
  */
 public class Flywheel extends SubsystemBase {
-  private final CANSparkMax m_flyLeft;
-  private final CANSparkMax m_flyRight;
+  private final CANSparkMax m_shooter;
+  private final CANSparkMax m_bumper;
 
-  private final RelativeEncoder m_leftEncoder;
-  private final RelativeEncoder m_rightEncoder;
+  private final RelativeEncoder m_shooterEnc;
+  private final RelativeEncoder m_bumperEnc;
 
-  private final PIDController m_controller;
-  private final SimpleMotorFeedforward m_feedforward;
+  private final PIDController m_shooterController;
+  private final SimpleMotorFeedforward m_shooterFeedForward;
+  private final PIDController m_bumperController;
+  private final SimpleMotorFeedforward m_bumperFeedForward;
   /** Creates a new Flywheel. */
   public Flywheel() {
-    m_flyLeft = new CANSparkMax(FlywheelConstants.kFlyLeft, MotorType.kBrushless);
-    m_flyRight = new CANSparkMax(FlywheelConstants.kFlyRight, MotorType.kBrushless);
-    m_flyLeft.restoreFactoryDefaults();
-    m_flyRight.restoreFactoryDefaults();
-    m_flyRight.follow(m_flyLeft, true);
-    m_flyLeft.setIdleMode(IdleMode.kCoast);
-    m_flyRight.setIdleMode(IdleMode.kCoast);
+    m_shooter = new CANSparkMax(FlywheelConstants.kFlyLeft, MotorType.kBrushless);
+    m_bumper = new CANSparkMax(FlywheelConstants.kFlyRight, MotorType.kBrushless);
+    m_shooter.restoreFactoryDefaults();
+    m_bumper.restoreFactoryDefaults();
+    m_shooter.setInverted(false);
+    m_bumper.setInverted(false);
+    m_shooter.setIdleMode(IdleMode.kCoast);
+    m_bumper.setIdleMode(IdleMode.kCoast);
 
-    m_leftEncoder = m_flyLeft.getEncoder();
-    m_rightEncoder = m_flyRight.getEncoder();
+    m_shooterEnc = m_shooter.getEncoder();
+    m_bumperEnc = m_bumper.getEncoder();
 
-    m_controller =
+    m_shooterController =
         new PIDController(FlywheelConstants.kP, FlywheelConstants.kI, FlywheelConstants.kD);
-    m_feedforward =
+    m_shooterFeedForward =
+        new SimpleMotorFeedforward(
+            FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
+    m_bumperController =
+        new PIDController(FlywheelConstants.kP, FlywheelConstants.kI, FlywheelConstants.kD);
+    m_bumperFeedForward =
         new SimpleMotorFeedforward(
             FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
   }
@@ -53,24 +61,24 @@ public class Flywheel extends SubsystemBase {
    *
    * @return the encoder's RPM.
    */
-  public double getLeftRPM() {
-    return m_leftEncoder.getVelocity();
+  public double getShooterRPM() {
+    return m_shooterEnc.getVelocity();
   }
 
-  public double getRightRPM() {
-    return m_rightEncoder.getVelocity();
+  public double getBumperRPM() {
+    return m_bumperEnc.getVelocity();
   }
 
   /** Manually sets the throttle of the flywheel. */
   public void set() {
-    m_flyLeft.set(0.5);
-    m_flyRight.set(0.5);
+    m_shooter.set(0.5);
+    // m_flyRight.set(0.5);
   }
 
   /** Stops the flywheel. */
   public void stop() {
-    m_flyLeft.stopMotor();
-    m_flyRight.stopMotor();
+    m_shooter.stopMotor();
+    m_bumper.stopMotor();
   }
 
   /**
@@ -79,14 +87,17 @@ public class Flywheel extends SubsystemBase {
    * @param desiredVelocity
    */
   public void setRPM(double desiredVelocity) {
-    m_flyLeft.setVoltage(
-        m_controller.calculate(m_leftEncoder.getVelocity(), desiredVelocity)
-            + m_feedforward.calculate(desiredVelocity));
+    m_shooter.setVoltage(
+        m_shooterController.calculate(m_shooterEnc.getVelocity(), desiredVelocity)
+            + m_shooterFeedForward.calculate(desiredVelocity));
+    m_bumper.setVoltage(
+        m_bumperController.calculate(m_bumperEnc.getVelocity(), desiredVelocity)
+            + m_bumperFeedForward.calculate(desiredVelocity));
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("FlywheelLeftRPM", getLeftRPM());
-    SmartDashboard.putNumber("FlywheelRightRPM", getRightRPM());
+    SmartDashboard.putNumber("FlywheelLeftRPM", getShooterRPM());
+    SmartDashboard.putNumber("FlywheelRightRPM", getBumperRPM());
   }
 }

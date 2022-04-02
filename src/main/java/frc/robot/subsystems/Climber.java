@@ -7,11 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
@@ -20,9 +15,11 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   // private final DoubleSolenoid m_sol =
   //     new DoubleSolenoid(
-  //         PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward, ClimberConstants.kSolReverse);
+  //         PneumaticsModuleType.CTREPCM, ClimberConstants.kSolForward,
+  // ClimberConstants.kSolReverse);
 
   private WPI_TalonSRX m_master = new WPI_TalonSRX(ClimberConstants.kClimberMasterSRX);
+
   private WPI_TalonSRX m_follower = new WPI_TalonSRX(ClimberConstants.kClimberFollowerSRX);
   // private WPI_CANCoder m_encoder = new WPI_CANCoder(ClimberConstants.kEncoder);
 

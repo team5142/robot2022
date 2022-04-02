@@ -17,12 +17,12 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class DriveConstants {
-    public static int kLeftMaster = 4;
-    public static int kLeftSlave = 5;
-    public static int kRightMaster = 2;
-    public static int kRightSlave = 3;
+    public static int kLeftMaster = 2;
+    public static int kLeftSlave = 3;
+    public static int kRightMaster = 4;
+    public static int kRightSlave = 5;
     public static double ksVolts = 0.71928;
-    public static double ksVoltsSecondsPerMeter = 34.063;
+    public static double kvVoltsSecondsPerMeter = 34.063;
     public static double kaVoltsSecondsSquaredPerMeter = 12.029;
     public static double kPDrive = 0.076681;
     public static final DifferentialDriveKinematics kKinematics =

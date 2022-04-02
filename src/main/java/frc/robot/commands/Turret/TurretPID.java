@@ -2,17 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Turret;
+import java.util.function.DoubleSupplier;
 
-public class ExtendGrabber extends CommandBase {
-  private final Grabber m_grabber;
-  /** Creates a new ExtendGrabber. */
-  public ExtendGrabber(Grabber grabber) {
-    m_grabber = grabber;
-    addRequirements(grabber);
+public class TurretPID extends CommandBase {
+  /** Creates a new TurretPID. */
+  private final Turret m_turret;
+
+  private static DoubleSupplier target;
+
+  public TurretPID(Turret turret, DoubleSupplier setpoint) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_turret = turret;
+    addRequirements(turret);
+    target = setpoint;
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +28,13 @@ public class ExtendGrabber extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.extendGrabber();
+    m_turret.setTarget(target.getAsDouble() * 90);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_grabber.offGrabber();
+    m_turret.stopMotor();
   }
 
   // Returns true when the command should end.

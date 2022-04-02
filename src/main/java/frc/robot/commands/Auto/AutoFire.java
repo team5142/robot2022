@@ -2,17 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Flywheel;
 
-public class RetractGrabber extends CommandBase {
-  private final Grabber m_grabber;
-  /** Creates a new RetractGrabber. */
-  public RetractGrabber(Grabber grabber) {
-    m_grabber = grabber;
-    addRequirements(grabber);
+public class AutoFire extends CommandBase {
+  /** Creates a new AutoFire. */
+  private final Conveyor m_conveyor;
+
+  private final Flywheel m_fly;
+
+  public AutoFire(Conveyor conv, Flywheel fly) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_conveyor = conv;
+    m_fly = fly;
+    addRequirements(conv, fly);
   }
 
   // Called when the command is initially scheduled.
@@ -22,18 +29,22 @@ public class RetractGrabber extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.retractGrabber();
+    m_conveyor.manual(-0.5);
+    m_fly.setRPM(2000);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_grabber.offGrabber();
+    m_conveyor.manual(0);
+    m_fly.stop();
   }
 
   // Returns true when the command should end.
-  @Override
   public boolean isFinished() {
+    if (Timer.getMatchTime() < 12) {
+      return true;
+    }
     return false;
   }
 }

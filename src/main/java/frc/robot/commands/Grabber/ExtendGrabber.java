@@ -2,19 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Grabber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
 
-public class AutoHarvest extends CommandBase {
-  /** Creates a new AutoHarvest. */
+public class ExtendGrabber extends CommandBase {
   private final Grabber m_grabber;
-
-  public AutoHarvest(Grabber grabber) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new ExtendGrabber. */
+  public ExtendGrabber(Grabber grabber) {
     m_grabber = grabber;
-    addRequirements(m_grabber);
+    addRequirements(grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +23,6 @@ public class AutoHarvest extends CommandBase {
   @Override
   public void execute() {
     m_grabber.extendGrabber();
-    m_grabber.startGrab(1);
   }
 
   // Called once the command ends or is interrupted.

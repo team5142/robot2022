@@ -17,20 +17,21 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.AutoDrive;
-import frc.robot.commands.AutoDriveForward;
-import frc.robot.commands.AutoFire;
-import frc.robot.commands.AutoHarvest;
-import frc.robot.commands.AutoTurn;
+import frc.robot.commands.Climber.BrakeClimber;
+import frc.robot.commands.Climber.LiftClimber;
+import frc.robot.commands.Climber.LowerClimber;
+import frc.robot.commands.Climber.UnbrakeClimber;
+import frc.robot.commands.Conveyor.PushConveyor;
+import frc.robot.commands.Conveyor.SpinConveyor;
+import frc.robot.commands.Drivetrain.ArcadeDrive;
+import frc.robot.commands.Flywheel.FlywheelSpool;
+import frc.robot.commands.Grabber.ExtendGrabber;
+import frc.robot.commands.Grabber.Grab;
+import frc.robot.commands.Grabber.RetractGrabber;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
@@ -48,13 +49,12 @@ import java.util.function.DoubleSupplier;
  */
 public class RobotContainer {
   // Joysticks
-  private final Joystick m_joystick = new Joystick(0);
-  private final Joystick m_joystickR = new Joystick(2);
-  private final Joystick m_operator = new Joystick(1);
+  private final Joystick m_driverRight = new Joystick(0);
+  private final Joystick m_driverLeft = new Joystick(1);
+  private final Joystick m_operator = new Joystick(2);
 
-  private final DoubleSupplier m_forwardAxis = () -> m_joystick.getRawAxis(1);
-  // private final DoubleSupplier m_rotationAxis = () -> m_joystick.getRawAxis(0);
-  private final DoubleSupplier m_rotationAxis = () -> m_joystickR.getRawAxis(0);
+  private final DoubleSupplier m_driverForward = () -> m_driverRight.getRawAxis(1);
+  private final DoubleSupplier m_driverRotation = () -> m_driverLeft.getRawAxis(0);
 
   private final DoubleSupplier m_opForward = () -> m_operator.getRawAxis(3);
   private final DoubleSupplier m_opLeftHorizontal = () -> m_operator.getRawAxis(0);
@@ -65,24 +65,39 @@ public class RobotContainer {
   private final Grabber m_grabber = new Grabber();
   private final Turret m_turret = new Turret();
   private final Climber m_climber = new Climber();
-  private final Flywheel m_fly = new Flywheel();
+  private final Flywheel m_flywheel = new Flywheel();
 
-  private final AutoDrive m_autoDrive = new AutoDrive(m_drive);
-  private final AutoDriveForward m_autoForward = new AutoDriveForward(m_drive);
-  private final AutoFire m_autoFire = new AutoFire(m_conveyor, m_fly);
-  private final AutoHarvest m_autoHarv = new AutoHarvest(m_grabber);
-  private final AutoTurn m_autoTurn = new AutoTurn(m_drive);
-  private final InstantCommand m_resetNav = new InstantCommand(m_drive::resetNav, m_drive);
-  private final ParallelCommandGroup m_autoHarvDrive =
-      new ParallelCommandGroup(m_autoHarv, m_autoDrive);
-  // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoForward,
-  // m_autoFire, m_autoHarvDrive);
-  private final SequentialCommandGroup m_auto =
-      new SequentialCommandGroup(m_autoFire, m_resetNav, m_autoTurn, m_autoHarvDrive);
-  // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire,
-  // m_autoHarvDrive);
+  private final RetractGrabber m_retractGrabber = new RetractGrabber(m_grabber);
+  private final ExtendGrabber m_extendGrabber = new ExtendGrabber(m_grabber);
+  private final FlywheelSpool m_flySpool = new FlywheelSpool(m_flywheel);
+  private final PushConveyor m_pushConveyor = new PushConveyor(m_conveyor);
+  private final LiftClimber m_liftClimber = new LiftClimber(m_climber);
+  private final LowerClimber m_lowerClimber = new LowerClimber(m_climber);
+  private final BrakeClimber m_brakeClimber = new BrakeClimber(m_climber);
+  private final UnbrakeClimber m_unbrakeClimber = new UnbrakeClimber(m_climber);
+  private final Grab m_grab = new Grab(m_grabber, m_opForward);
+  private final SpinConveyor m_manualConveyor = new SpinConveyor(m_conveyor, m_opForward);
 
-  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_forwardAxis, m_rotationAxis);
+  private final ArcadeDrive m_arcadeDrive =
+      new ArcadeDrive(m_drive, m_driverForward, m_driverRotation);
+
+  //   private final AutoDrive m_autoDrive = new AutoDrive(m_drive);
+  //   private final AutoDriveForward m_autoForward = new AutoDriveForward(m_drive);
+  //   private final AutoFire m_autoFire = new AutoFire(m_conveyor, m_fly);
+  //   private final AutoHarvest m_autoHarv = new AutoHarvest(m_grabber);
+  //   private final AutoTurn m_autoTurn = new AutoTurn(m_drive);
+  //   private final InstantCommand m_resetNav = new InstantCommand(m_drive::zeroHeading, m_drive);
+  //   private final ParallelCommandGroup m_autoHarvDrive =
+  //       new ParallelCommandGroup(m_autoHarv, m_autoDrive);
+  //   // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoForward,
+  //   // m_autoFire, m_autoHarvDrive);
+  //   private final SequentialCommandGroup m_auto =
+  //       new SequentialCommandGroup(m_autoFire, m_resetNav, m_autoTurn, m_autoHarvDrive);
+  //   // private final SequentialCommandGroup m_auto = new SequentialCommandGroup(m_autoFire,
+  //   // m_autoHarvDrive);
+
+  //   private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drive, m_forwardAxis,
+  // m_rotationAxis);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -93,55 +108,21 @@ public class RobotContainer {
   // Button -> Command Mapping
   private void configureButtonBindings() {
 
-    new JoystickButton(m_joystick, 5).whenPressed(new InstantCommand(m_turret::zeroEncoder));
-    new JoystickButton(m_joystick, 10).whenPressed(new InstantCommand(m_climber::zeroEncoder));
+    new JoystickButton(m_driverRight, 5).whenPressed(new InstantCommand(m_turret::zeroEncoder));
+    new JoystickButton(m_driverRight, 10).whenPressed(new InstantCommand(m_climber::zeroEncoder));
 
-    new JoystickButton(m_operator, 6)
-        .whenPressed(
-            new StartEndCommand(m_grabber::retractGrabber, m_grabber::offGrabber, m_grabber)
-                .withTimeout(2));
-    new JoystickButton(m_operator, 8)
-        .whenPressed(
-            new StartEndCommand(m_grabber::extendGrabber, m_grabber::offGrabber, m_grabber)
-                .withTimeout(2));
-    new JoystickButton(m_operator, 1)
-        .whileHeld(() -> m_turret.setTarget(m_opLeftHorizontal.getAsDouble() * 90));
-    // new JoystickButton(m_operator, 5).whileHeld(autoAim);
-    new JoystickButton(m_operator, 5).whileHeld(() -> m_fly.setRPM(3000), m_fly);
-    new JoystickButton(m_operator, 7).whileHeld(() -> m_conveyor.manual(-0.5), m_conveyor);
-    new POVButton(m_operator, 0)
-        .whileHeld(
-            new StartEndCommand(m_climber::liftClimber, m_climber::stop, m_climber)
-                .withInterrupt(m_climber::getTop));
-    new POVButton(m_operator, 180)
-        .whileHeld(
-            new StartEndCommand(m_climber::lowerClimber, m_climber::stop, m_climber)
-                .withInterrupt(m_climber::getBottom));
-    new POVButton(m_operator, 90)
-        .whenPressed(
-            new StartEndCommand(m_climber::brakeOn, m_climber::brakeOff, m_climber).withTimeout(5));
-    new POVButton(m_operator, 270)
-        .whenPressed(
-            new StartEndCommand(m_climber::brakeRev, m_climber::brakeOff, m_climber)
-                .withTimeout(5));
-    m_drive.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              m_drive.arcadeDrive(m_forwardAxis.getAsDouble(), m_rotationAxis.getAsDouble());
-            },
-            m_drive));
-    m_grabber.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              m_grabber.startGrab(m_opForward.getAsDouble());
-            },
-            m_grabber));
-    m_conveyor.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              m_conveyor.manual(-m_opForward.getAsDouble());
-            },
-            m_conveyor));
+    new JoystickButton(m_operator, 6).whenPressed(m_retractGrabber.withTimeout(2));
+    new JoystickButton(m_operator, 8).whenPressed(m_extendGrabber.withTimeout(2));
+    new JoystickButton(m_operator, 5).whileHeld(m_flySpool);
+    new JoystickButton(m_operator, 7).whileHeld(m_pushConveyor);
+    new POVButton(m_operator, 0).whileHeld(m_liftClimber);
+    new POVButton(m_operator, 180).whileHeld(m_lowerClimber);
+    new POVButton(m_operator, 90).whenPressed(m_brakeClimber.withTimeout(2));
+    new POVButton(m_operator, 270).whenPressed(m_unbrakeClimber.withTimeout(2));
+
+    m_drive.setDefaultCommand(m_arcadeDrive);
+    m_grabber.setDefaultCommand(m_grab);
+    m_conveyor.setDefaultCommand(m_manualConveyor);
   }
 
   /**
@@ -156,7 +137,7 @@ public class RobotContainer {
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(
                 DriveConstants.ksVolts,
-                DriveConstants.ksVoltsSecondsPerMeter,
+                DriveConstants.kvVoltsSecondsPerMeter,
                 DriveConstants.kaVoltsSecondsSquaredPerMeter),
             DriveConstants.kKinematics,
             10);
@@ -171,10 +152,7 @@ public class RobotContainer {
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(
-              new Translation2d(1, 1), 
-              new Translation2d(2, -1)
-            ),
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
             // List.of(new Translation2d(1, 0)),
             // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(3, 0, new Rotation2d(0)),
@@ -188,7 +166,7 @@ public class RobotContainer {
             new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
                 DriveConstants.ksVolts,
-                DriveConstants.ksVoltsSecondsPerMeter,
+                DriveConstants.kvVoltsSecondsPerMeter,
                 DriveConstants.kaVoltsSecondsSquaredPerMeter),
             DriveConstants.kKinematics,
             m_drive::getWheelSpeeds,

@@ -2,44 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Turret;
 
-public class AutoDriveForward extends CommandBase {
-  /** Creates a new AutoDrive. */
-  private final Drivetrain m_drive;
+public class TurretLeft extends CommandBase {
+  /** Creates a new TurretLeft. */
+  private final Turret m_turret;
 
-  public AutoDriveForward(Drivetrain drive) {
+  public TurretLeft(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    addRequirements(drive);
+    m_turret = turret;
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drive.resetEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(.4, 0);
+    m_turret.turnLeft();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
+    m_turret.stopMotor();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double avg = (m_drive.getLeftPos() + m_drive.getRightPos()) / 2;
-    if ((Math.abs(avg) > 450)) {
+    if (m_turret.getPos() <= -43) {
       return true;
     }
     return false;

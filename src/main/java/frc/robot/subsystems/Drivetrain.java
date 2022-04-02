@@ -4,13 +4,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,23 +24,22 @@ import frc.robot.Constants.*;
  * @author Spencer Greene
  */
 public class Drivetrain extends SubsystemBase {
-  private final WPI_TalonSRX m_rightMaster, m_rightSlave, m_leftMaster, m_leftSlave;
+  private final WPI_TalonSRX m_rightMaster, m_leftMaster;
+  private final WPI_VictorSPX m_rightSlave, m_leftSlave;
 
   private final DifferentialDrive m_drive;
   private final AHRS m_nav;
   private final Field2d m_field = new Field2d();
-  public final DifferentialDriveOdometry m_odometry;
-  // private boolean quickTurn = false;
+  private final DifferentialDriveOdometry m_odometry;
 
   /** Crreates a new Drivetrain Subsystem. */
   public Drivetrain() {
     // Construct motors
     m_rightMaster = new WPI_TalonSRX(DriveConstants.kRightMaster);
-    m_rightSlave = new WPI_TalonSRX(DriveConstants.kRightSlave);
+    m_rightSlave = new WPI_VictorSPX(DriveConstants.kRightSlave);
     m_leftMaster = new WPI_TalonSRX(DriveConstants.kLeftMaster);
-    m_leftSlave = new WPI_TalonSRX(DriveConstants.kLeftSlave);
+    m_leftSlave = new WPI_VictorSPX(DriveConstants.kLeftSlave);
 
-    // Clear config
     m_rightMaster.configFactoryDefault();
     m_rightSlave.configFactoryDefault();
     m_leftMaster.configFactoryDefault();
@@ -65,51 +64,9 @@ public class Drivetrain extends SubsystemBase {
     // Construct a drivetrain;
     m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
 
-    // Odometry Management
     m_nav = new AHRS(SerialPort.Port.kMXP);
-    m_nav.reset();
+    resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_nav.getRotation2d());
-  }
-
-  /**
-   * Method for driving the robot teleoperated in an arcade manner.
-   *
-   * @param forward the supplied speed along the x axis.
-   * @param rotation the supplied speed along the z axis.
-   */
-  public void arcadeDrive(double forward, double rotation) {
-    m_drive.arcadeDrive(forward, rotation);
-  }
-
-  public void tankDriveVolts(double leftVolts, double rightVolts) {
-    m_leftMaster.setVoltage(leftVolts);
-    m_rightMaster.setVoltage(rightVolts);
-    m_drive.feed();
-  }
-
-  public void resetNav() {
-    m_nav.reset();
-  }
-
-  public void resetEncoders() {
-    m_leftMaster.setSelectedSensorPosition(0);
-    m_rightMaster.setSelectedSensorPosition(0);
-  }
-
-  public double getLeftPos() {
-    return m_leftMaster.getSelectedSensorPosition();
-  }
-
-  public double getRightPos() {
-    return m_rightMaster.getSelectedSensorPosition();
-  }
-
-  public double getHeading() {
-    return m_nav.getAngle();
-  }
-
-  public double getTurnRate() {
-    return -m_nav.getRate();
   }
 
   public Pose2d getPose() {
@@ -127,12 +84,47 @@ public class Drivetrain extends SubsystemBase {
     m_odometry.resetPosition(pose, m_nav.getRotation2d());
   }
 
-  /** UTILITY FUNCTIONS * */
-  private int distanceToNativeUnits(double positionMeters) {
-    double wheelRotations = positionMeters / (2 * Math.PI * Units.inchesToMeters(3));
-    double motorRotations = wheelRotations * 10.71;
-    int sensorCounts = (int) (motorRotations * 4096);
-    return sensorCounts;
+  public void arcadeDrive(double forward, double rotation) {
+    m_drive.arcadeDrive(forward, rotation);
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    m_leftMaster.setVoltage(leftVolts);
+    m_rightMaster.setVoltage(rightVolts);
+    m_drive.feed();
+  }
+
+  public void resetEncoders() {
+    m_leftMaster.setSelectedSensorPosition(0);
+    m_rightMaster.setSelectedSensorPosition(0);
+  }
+
+  public double getAverageEncoderDistance() {
+    return (getLeftDistance() + getRightDistance()) / 2.0;
+  }
+
+  public double getLeftDistance() {
+    return nativeUnitsToDistanceMeters(m_leftMaster.getSelectedSensorPosition());
+  }
+
+  public double getRightDistance() {
+    return nativeUnitsToDistanceMeters(m_rightMaster.getSelectedSensorPosition());
+  }
+
+  public void setMaxOutput(double maxOutput) {
+    m_drive.setMaxOutput(maxOutput);
+  }
+
+  public void zeroHeading() {
+    m_nav.reset();
+  }
+
+  public double getHeading() {
+    return m_nav.getRotation2d().getDegrees();
+  }
+
+  public double getTurnRate() {
+    return -m_nav.getRate();
   }
 
   private double nativeUnitsToDistanceMeters(double sensorCounts) {
@@ -147,13 +139,8 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(
         m_nav.getRotation2d(),
-        nativeUnitsToDistanceMeters(getLeftPos()),
-        nativeUnitsToDistanceMeters(getRightPos()));
-    SmartDashboard.putNumber("LeftEnc", getLeftPos());
-    SmartDashboard.putNumber("RightEnc", getRightPos());
-    SmartDashboard.putNumber("PosX", getPose().getX());
-    SmartDashboard.putNumber("PosY", getPose().getY());
-    SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        nativeUnitsToDistanceMeters(getLeftDistance()),
+        nativeUnitsToDistanceMeters(getRightDistance()));
     m_field.setRobotPose(getPose());
     SmartDashboard.putData(m_field);
   }

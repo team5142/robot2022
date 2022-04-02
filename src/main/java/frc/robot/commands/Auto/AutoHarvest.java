@@ -2,20 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
-import java.util.function.DoubleSupplier;
 
-public class Grab extends CommandBase {
+public class AutoHarvest extends CommandBase {
+  /** Creates a new AutoHarvest. */
   private final Grabber m_grabber;
-  private DoubleSupplier m_speed;
-  /** Creates a new Grab. */
-  public Grab(Grabber grabber, DoubleSupplier speed) {
+
+  public AutoHarvest(Grabber grabber) {
+    // Use addRequirements() here to declare subsystem dependencies.
     m_grabber = grabber;
-    m_speed = speed;
-    addRequirements(grabber);
+    addRequirements(m_grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +24,14 @@ public class Grab extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.startGrab(m_speed.getAsDouble());
+    m_grabber.extendGrabber();
+    m_grabber.startGrab(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_grabber.stopGrab();
+    m_grabber.offGrabber();
   }
 
   // Returns true when the command should end.
